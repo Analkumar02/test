@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.css": "/velavie/static/css/main.31d6cfe0.css",
+    "main.js": "/velavie/static/js/main.e9a45cd7.js",
+    "index.html": "/velavie/index.html",
+    "main.e9a45cd7.js.map": "/velavie/static/js/main.e9a45cd7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.31d6cfe0.css",
+    "static/js/main.e9a45cd7.js"
+  ]
+}
