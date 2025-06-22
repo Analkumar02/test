@@ -47,8 +47,8 @@
     "autoprefixer": "^10.4.21",
     "caniuse-lite": "^1.0.30001721",
     "gh-pages": "^6.3.0",
+    "postbuild": "cp build/index.html build/404.html",
     "postcss": "^8.5.4",
-    "postcss-preset-env": "^10.2.0",
-    "postbuild": "cp build/index.html build/404.html"
+    "postcss-preset-env": "^10.2.0"
   }
 }
