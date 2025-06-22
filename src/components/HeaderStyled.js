@@ -278,35 +278,52 @@ export const SearchBarOverlay = styled.div`
 `;
 
 export const SearchBarBox = styled.div`
-  margin-top: 32px;
+  margin-top: 1.67vw;
   width: 95vw;
   max-width: 900px;
   background: ${({ theme }) => theme.colors.white};
-  border-radius: 12px;
+  border-radius: 0.63vw;
   display: flex;
   align-items: center;
-  padding: 18px 24px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
-  font-size: 1.5rem;
+  padding: 0.94vw 1.25vw;
+  box-shadow: 0 0.1vw 0.83vw rgba(0, 0, 0, 0.04);
+  font-size: 1.5vw;
   position: relative;
+
+  @media (max-width: 600px) {
+    padding: 4vw 3vw;
+    font-size: 4vw;
+    margin-top: 4vw;
+    border-radius: 2vw;
+  }
 `;
 
 export const SearchInput = styled.input`
   border: none;
   background: transparent;
-  font-size: 1.3rem;
+  font-size: 1.3vw;
   flex: 1;
-  margin-left: 12px;
+  margin-left: 0.63vw;
   outline: none;
+
+  @media (max-width: 600px) {
+    font-size: 4vw;
+    margin-left: 2vw;
+  }
 `;
 
 export const SearchClose = styled.button`
   background: none;
   border: none;
-  font-size: 2rem;
+  font-size: 2vw;
   cursor: pointer;
   color: #222;
-  margin-left: 12px;
+  margin-left: 0.63vw;
+
+  @media (max-width: 600px) {
+    font-size: 6vw;
+    margin-left: 2vw;
+  }
 `;
 
 export const SearchSuggestionsBox = styled.div`
