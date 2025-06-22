@@ -1,0 +1,377 @@
+[
+  {
+    "id": "1",
+    "productName": "Sugar Shift",
+    "description": "Experience the whole body benefits of our patented probiotic Sugar Shift",
+    "benefits": [
+      "Restores overall digestive health to make you feel better.",
+      "Decreases sugar and carb cravings over time.",
+      "Boosts energy and lessens fatigue keeping you active and refreshed.",
+      "Improves glucose metabolism by reducing levels of blood glucose.",
+      "Improves bowel regularity. Provides relief of both diarrhea and constipation."
+    ],
+    "capsuleCount": 60,
+    "pricing": {
+      "subscribeAndSave": {
+        "discountedPrice": 35.99,
+        "originalPrice": 44.99,
+        "savePercent": 20,
+        "benefits": [
+          "Save 20% every time",
+          "Double points on every order so you can get to free shipping sooner!",
+          "Early access to sales"
+        ],
+        "deliveryOptions": [
+          "30 days",
+          "60 days",
+          "90 days"
+        ]
+      },
+      "oneTimePurchase": {
+        "price": 44.99
+      }
+    },
+    "testimonial": {
+      "quote": "This is the first probiotic that I’ve ever felt. It really helps with hunger after meals and sugar cravings! I’ll definitely be buying again.",
+      "author": "Paula S.",
+      "designation": "Verified Customer"
+    },
+    "slideshowImages": [
+      "product1-image1.png",
+      "product1-image1@2x.png",
+      "product1-image1@3x.png",
+      "product1-image2.jpg",
+      "product1-image2@2x.jpg",
+      "product1-image2@3x.jpg",
+      "product1-image3.jpg",
+      "product1-image3@2x.jpg",
+      "product1-image3@3x.jpg",
+      "product1-image4.jpg",
+      "product1-image4@2x.jpg",
+      "product1-image4@3x.jpg",
+      "product1-image5.jpg",
+      "product1-image5@2x.jpg",
+      "product1-image5@3x.jpg"
+    ],
+    "faq": [
+      {
+        "question": "Why it works",
+        "answer": "The Velavie Sugar Shift formula features a meticulously curated team of probiotic strains that work synergistically to convert excess sugars—like glucose and fructose—into mannitol, a potent antioxidant known for its distinctive health-supporting properties. This natural transformation helps ease sugar spikes in the bloodstream while generating mannitol, which also serves as a prebiotic, nourishing beneficial bacteria and fostering a more balanced, diverse microbiome.<br>Unlike glucose or fructose, mannitol isn’t metabolized by the body in the same way. Instead, it supports gut health and is then gently excreted via the urine. This dual-function approach aids in healthier sugar processing while promoting overall digestive wellness, offering a smart, natural strategy to combat the effects of high-sugar diets.<br>What makes Sugar Shift by Velavie stand out is its precisely selected group of probiotic strains—engineered to restore harmony within the microbiome. It’s not just another probiotic supplement; it’s a pioneering, targeted solution designed to support both metabolic balance and gut vitality."
+      },
+      {
+        "question": "Why we created Sugar Shift",
+        "answer": "As we delved into the science, I uncovered the profound impact that sugars—particularly fructose—have on the gut microbiome and metabolic health. These hidden sugars are everywhere in our modern diet, making them hard to avoid, yet their effects on the body can be far-reaching and damaging."
+      },
+      {
+        "question": "Why it’s revolutionary",
+        "answer": "Velavie Sugar Shift isn’t just another probiotic—it represents a true advancement in gut and metabolic wellness. Unlike typical probiotics that simply add beneficial bacteria, Sugar Shift delivers a carefully selected team of microbes designed to actively rebalance and revitalize the microbiome at its core.<br>By enhancing microbial diversity and restoring balance, Sugar Shift supports essential functions like nutrient absorption, natural detoxification, inflammation reduction, and sustained energy levels. It goes beyond sugar management—offering a transformative approach to help your body flourish in today’s demanding world."
+      },
+      {
+        "question": "How to take",
+        "answer": "Take 2 capsules per day. We recommend taking 1 in the morning and 1 around dinner time."
+      },
+      {
+        "question": "30-day money back guarantee",
+        "answer": "At Velavie, we believe in the life-changing potential of Sugar Shift and want you to feel empowered in your decision to try it. That’s why we back every purchase with our satisfaction guarantee. If you’re not completely happy with how you feel after using Sugar Shift, just reach out to us within 30 days—and we’ll refund your full purchase price.<br>It’s our way of supporting your path to better health—so you can take this meaningful step toward wellness with confidence and peace of mind."
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "productName": "Simple Slumber",
+    "description": "Simple Slumber supports the body’s natural production of calming metabolites that encourage restful sleep and relaxation.",
+    "benefits": [
+      "Promotes peaceful, sound sleep",
+      "Helps support signaling between the gut & brain",
+      "Supports healthy nerves and blood cells",
+      "May reduce cellular inflammation by reducing pathogen load",
+      "Increases melatonin and serotonin production (the hormones that play a crucial role in regulating sleep)"
+    ],
+    "capsuleCount": 60,
+    "pricing": {
+      "subscribeAndSave": {
+        "discountedPrice": 35.99,
+        "originalPrice": 44.99,
+        "savePercent": 20,
+        "benefits": [
+          "Save 20% every time",
+          "Double points on every order so you can get to free shipping sooner!",
+          "Early access to sales"
+        ],
+        "deliveryOptions": [
+          "30 days",
+          "60 days",
+          "90 days"
+        ]
+      },
+      "oneTimePurchase": {
+        "price": 44.99
+      }
+    },
+    "testimonial": {
+      "quote": "I sleep more sound than I have in years. I never wake up groggy either. I can't wait for my next order.",
+      "author": "Shelli K.",
+      "designation": "Verified Customer"
+    },
+    "slideshowImages": [
+      "product2-image1.png",
+      "product2-image1@2x.png",
+      "product2-image1@3x.png",
+      "product2-image2.jpg",
+      "product2-image2@2x.jpg",
+      "product2-image2@3x.jpg",
+      "product2-image3.jpg",
+      "product2-image3@2x.jpg",
+      "product2-image3@3x.jpg",
+      "product2-image4.jpg",
+      "product2-image4@2x.jpg",
+      "product2-image4@3x.jpg",
+      "product2-image5.jpg",
+      "product2-image5@2x.jpg",
+      "product2-image5@3x.jpg"
+    ],
+    "faq": [
+      {
+        "question": " Why we created Simple Slumber",
+        "answer": "The gut microbiome plays a crucial role in the communication between the digestive system and the brain. This gut-brain signaling is driven by metabolites and other compounds produced by the microbiome, which can help regulate a calm and steady sleep cycle. Simple Slumber™ is designed to support this vital connection, encouraging balanced communication between the gut and brain to promote restful, uninterrupted sleep.<br>Quality sleep depends on how stress, nutrition, and environmental influences interact with the body’s metabolism. Improving sleep often starts with healthy lifestyle choices, such as better diet and regular physical activity. One of the most effective and accessible ways to support a healthy sleep-wake rhythm is by nurturing your gut microbiome. Simple Slumber features a unique probiotic blend formulated to encourage the natural production of sleep-supporting compounds and hormones—helping you achieve deep, restorative sleep."
+      },
+      {
+        "question": " Why it’s revolutionary",
+        "answer": "When the gut lining becomes compromised, harmful bacterial by-products—such as toxins and disruptive metabolites—can enter the bloodstream, triggering inflammation that may interfere with sleep quality. That’s why Simple Slumber includes two proprietary strains within our six-strain blend, each carefully selected to work synergistically with the others. This targeted formula is designed to help the body produce calming metabolites that support sleep and relaxation, reduce inflammatory compounds from breaching the gut barrier, and lower the presence of harmful pathogens. Together, these six probiotic strains form a stable, resilient microbial community—supporting gut integrity and, most importantly, promoting deep, restorative sleep."
+      },
+      {
+        "question": " How it works",
+        "answer": "Simple Slumber™ helps enhance the body’s natural production of melatonin and its precursor, serotonin—key hormones involved in regulating the sleep cycle. It also supports the activation of opiate receptors, which play a role in promoting deeper, more restful sleep. In addition, this formula encourages the production of powerful antioxidants like reduced glutathione and anti-inflammatory compounds such as butyrate, further supporting overall relaxation and recovery during sleep."
+      },
+      {
+        "question": "How to take",
+        "answer": "Take 1 capsule daily before bed for optimal sleep and gut benefits."
+      },
+      {
+        "question": "30-day money back guarantee",
+        "answer": "At Velavie, we believe in the life-changing potential of Sugar Shift and want you to feel empowered in your decision to try it. That’s why we back every purchase with our satisfaction guarantee. If you’re not completely happy with how you feel after using Sugar Shift, just reach out to us within 30 days—and we’ll refund your full purchase price.<br>It’s our way of supporting your path to better health—so you can take this meaningful step toward wellness with confidence and peace of mind."
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "productName": "Antibiotic Antidote ",
+    "description": "Antibiotic Antidote helps restore a healthy gut environment, creating optimal conditions for beneficial bacteria to thrive once again.",
+    "benefits": [
+      "Targets free radicals generated by antibiotic use (as well as disease and other exposures)",
+      "May help reduce cellular inflammation",
+      "Strengthens mucosal lining in the gut",
+      "Reduces pathogens by producing bacteriocins",
+      "Balances pH in the gut"
+    ],
+    "capsuleCount": 60,
+    "pricing": {
+      "subscribeAndSave": {
+        "discountedPrice": 30.99,
+        "originalPrice": 40.99,
+        "savePercent": 20,
+        "benefits": [
+          "Save 20% every time",
+          "Double points on every order so you can get to free shipping sooner!",
+          "Early access to sales"
+        ],
+        "deliveryOptions": [
+          "30 days",
+          "60 days",
+          "90 days"
+        ]
+      },
+      "oneTimePurchase": {
+        "price": 40.99
+      }
+    },
+    "testimonial": {
+      "quote": "Supports rapid recovery and is most effective when taken consistently for at least 3 months to promote complete healing. Thank you, Velavie!",
+      "author": "Esther B.",
+      "designation": "Verified Customer"
+    },
+    "slideshowImages": [
+      "product3-image1.png",
+      "product3-image1@2x.png",
+      "product3-image1@3x.png",
+      "product3-image2.jpg",
+      "product3-image2@2x.jpg",
+      "product3-image2@3x.jpg",
+      "product3-image3.jpg",
+      "product3-image3@2x.jpg",
+      "product3-image3@3x.jpg",
+      "product3-image4.jpg",
+      "product3-image4@2x.jpg",
+      "product3-image4@3x.jpg",
+      "product3-image5.jpg",
+      "product3-image5@2x.jpg",
+      "product3-image5@3x.jpg"
+    ],
+    "faq": [
+      {
+        "question": " Why we created Antibiotic Antidote",
+        "answer": "If you need to take antibiotics, know that you don’t have to accept the toll they can take on your body afterward. While antibiotics are effective at eliminating harmful pathogens, they also wipe out the beneficial bacteria essential for your overall well-being. This imbalance can lead to issues like digestive discomfort, skin irritation, and even cognitive disruptions. Velavie Antibiotic Antidote is designed to help restore a healthy gut microbiome and support stronger immune function.<br>Antibiotics work by destroying or inhibiting bacterial growth, but they often leave your immune system vulnerable in the process. Since gut recovery can take months, incorporating our targeted probiotic formula is a simple yet powerful way to support your body’s natural healing and rebuild long-term health from the inside out."
+      },
+      {
+        "question": " Why it’s revolutionary",
+        "answer": "Our eight-strain formula features three proprietary keystone strains that work synergistically with four additional carefully selected strains to create a stable, sustainable microbial community. This balanced ecosystem helps the gut microbiome produce vital metabolites that support overall wellness. We’ve also included a resilient soil-based bacterium—one our ancestors regularly encountered through daily interaction with nature. In contrast, modern lifestyles have distanced us from these beneficial microbes, making their reintroduction an essential part of restoring a healthy, diverse gut environment."
+      },
+      {
+        "question": " How it works",
+        "answer": "Antibiotic Antidote helps create the optimal environment for beneficial bacteria to thrive, supporting your body as it rebuilds its internal ecosystem and you begin to feel your best again."
+      },
+      {
+        "question": "30-day money back guarantee",
+        "answer": "At Velavie, we believe in the life-changing potential of Sugar Shift and want you to feel empowered in your decision to try it. That’s why we back every purchase with our satisfaction guarantee. If you’re not completely happy with how you feel after using Sugar Shift, just reach out to us within 30 days—and we’ll refund your full purchase price.<br>It’s our way of supporting your path to better health—so you can take this meaningful step toward wellness with confidence and peace of mind."
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "productName": "Heart Centered",
+    "description": "Heart Centered is a targeted probiotic designed to support cardiovascular wellness by helping establish a stable, balanced bacterial community that benefits heart health from the inside out.",
+    "benefits": [
+      "Increases the production of butyrate, CoQ10 and nitric oxide",
+      "Decreases pathogen load which may help reduce inflammation",
+      "Supports healthy circulation",
+      "Produces antioxidants to help reduce oxidative stress",
+      "May encourage improved wound healing"
+    ],
+    "capsuleCount": 60,
+    "pricing": {
+      "subscribeAndSave": {
+        "discountedPrice": 40.99,
+        "originalPrice": 50.99,
+        "savePercent": 20,
+        "benefits": [
+          "Save 20% every time",
+          "Double points on every order so you can get to free shipping sooner!",
+          "Early access to sales"
+        ],
+        "deliveryOptions": [
+          "30 days",
+          "60 days",
+          "90 days"
+        ]
+      },
+      "oneTimePurchase": {
+        "price": 50.99
+      }
+    },
+    "testimonial": {
+      "quote": "Heart Centered helped stabilize my heart rate almost immediately, and I started feeling significantly better. I even got back to riding my bicycle again—something I hadn’t done in a while. Now, I never want to be without it, so I’ve added Heart Centered to my subscription.",
+      "author": "Susan",
+      "designation": "Verified Customer"
+    },
+    "slideshowImages": [
+      "product4-image1.png",
+      "product4-image1@2x.png",
+      "product4-image1@3x.png",
+      "product4-image2.jpg",
+      "product4-image2@2x.jpg",
+      "product4-image2@3x.jpg",
+      "product4-image3.jpg",
+      "product4-image3@2x.jpg",
+      "product4-image3@3x.jpg",
+      "product4-image4.jpg",
+      "product4-image4@2x.jpg",
+      "product4-image4@3x.jpg",
+      "product4-image5.jpg",
+      "product4-image5@2x.jpg",
+      "product4-image5@3x.jpg"
+    ],
+    "faq": [
+      {
+        "question": "  Why we created Heart Centered",
+        "answer": "When the gut lining becomes compromised and microbial balance is disrupted, it can allow harmful pathogens to flourish—many of which produce inflammatory compounds that may directly impact cardiovascular health. One important marker associated with heart disease is a gut microbiome with a reduced ability to produce butyrate, a key anti-inflammatory compound. Heart Centered is specifically formulated to support the gut-heart connection and promote overall cardiovascular wellness.<br>Living heart-healthy means recognizing how stress, diet, and environmental exposures influence heart function. While lifestyle changes like regular exercise and improved nutrition are essential, one of the simplest and most effective ways to support your cardiovascular system is by restoring balance in the gut microbiome. Heart Centered is designed with targeted probiotic strains to do exactly that—nurturing both gut health and heart vitality."
+      },
+      {
+        "question": " Why it’s revolutionary",
+        "answer": "When the gut lining is compromised, bacterial toxins can cross into the bloodstream, triggering inflammation that may impact heart health. Heart Centered features a six-strain formula, including two proprietary strains, carefully selected to work synergistically with the others. This targeted blend is designed to support the body’s production of heart-protective metabolites, reduce harmful pathogens, and neutralize free radicals. Together, these six strains help create a stable, resilient microbial community—supporting a healthier gut microbiome and, in turn, a stronger cardiovascular system."
+      },
+      {
+        "question": " How it works",
+        "answer": "Our Heart Centered™ probiotic improves heart-health by increasing the production of butyrate, CoQ10 and nitric oxide. It helps your body restore balance in the gut and reduces cellular inflammation – and that makes you feel better."
+      },
+      {
+        "question": "30-day money back guarantee",
+        "answer": "At Velavie, we believe in the life-changing potential of Sugar Shift and want you to feel empowered in your decision to try it. That’s why we back every purchase with our satisfaction guarantee. If you’re not completely happy with how you feel after using Sugar Shift, just reach out to us within 30 days—and we’ll refund your full purchase price.<br>It’s our way of supporting your path to better health—so you can take this meaningful step toward wellness with confidence and peace of mind."
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "productName": "Ideal Immunity",
+    "description": "Defend against harmful pathogens and strengthen your immune system with targeted probiotic support.",
+    "benefits": [
+      "Produces anti-inflammatory compounds",
+      "Strengthens the lining of the gut",
+      "Increases antioxidant production",
+      "Promotes better sleep",
+      "Defends against foodborne pathogens",
+      "Optimizes nutrient absorption",
+      "Helps wound healing"
+    ],
+    "capsuleCount": 60,
+    "pricing": {
+      "subscribeAndSave": {
+        "discountedPrice": 35.99,
+        "originalPrice": 44.99,
+        "savePercent": 20,
+        "benefits": [
+          "Save 20% every time",
+          "Double points on every order so you can get to free shipping sooner!",
+          "Early access to sales"
+        ],
+        "deliveryOptions": [
+          "30 days",
+          "60 days",
+          "90 days"
+        ]
+      },
+      "oneTimePurchase": {
+        "price": 44.99
+      }
+    },
+    "testimonial": {
+      "quote": "This product has significantly reduced my symptoms—my allergies are finally under control.",
+      "author": "Brenda M",
+      "designation": "Verified Customer"
+    },
+    "slideshowImages": [
+      "product5-image1.png",
+      "product5-image1@2x.png",
+      "product5-image1@3x.png",
+      "product5-image2.jpg",
+      "product5-image2@2x.jpg",
+      "product5-image2@3x.jpg",
+      "product5-image3.jpg",
+      "product5-image3@2x.jpg",
+      "product5-image3@3x.jpg",
+      "product5-image4.jpg",
+      "product5-image4@2x.jpg",
+      "product5-image4@3x.jpg",
+      "product5-image5.jpg",
+      "product5-image5@2x.jpg",
+      "product5-image5@3x.jpg"
+    ],
+    "faq": [
+      {
+        "question": " Why we created Ideal Immunity",
+        "answer": "The strength of your immune system plays a central role in your overall health—and it’s deeply influenced by the state of your gut microbiome. In fact, around 70% of the immune system resides in the gut. A well-balanced and diverse microbial community supports not only immunity, but also brain function, skin health, and digestion. Ideal Immunity is specifically formulated to enhance the way the gut microbiome communicates with and supports the immune system.<br>Every day, our bodies are exposed to pathogens and environmental toxins that place stress on the immune system. One of the most effective defenses is a strong, resilient gut lining, which acts as a crucial immune barrier. Ideal Immunity helps reinforce this barrier and supports a healthier, more responsive immune system from the inside out."
+      },
+      {
+        "question": " Why it’s revolutionary",
+        "answer": "This powerful six-strain formula features three proprietary keystone strains that work in harmony with the other carefully selected strains to form a stable, sustainable microbial community. Together, they help the gut microbiome produce essential metabolites that support and optimize immune function.<br>Ideal Immunity is designed to reduce pathogen load, stimulate immune activity through beneficial signaling molecules, lower inflammation, and boost antioxidant production. The result is a targeted formula that strengthens immune resilience while helping to restore balance to the gut microbiome."
+      },
+      {
+        "question": " How it works",
+        "answer": "By increasing the production of butyrate to protect the gut lining, Ideal Immunity fortifies mucosal surfaces and adjusts pH to give your immune system the boost its craving."
+      },
+      {
+        "question": "30-day money back guarantee",
+        "answer": "At Velavie, we believe in the life-changing potential of Sugar Shift and want you to feel empowered in your decision to try it. That’s why we back every purchase with our satisfaction guarantee. If you’re not completely happy with how you feel after using Sugar Shift, just reach out to us within 30 days—and we’ll refund your full purchase price.<br>It’s our way of supporting your path to better health—so you can take this meaningful step toward wellness with confidence and peace of mind."
+      }
+    ]
+  }
+]
