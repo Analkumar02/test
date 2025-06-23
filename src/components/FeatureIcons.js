@@ -43,13 +43,9 @@ const FeatureIcon = styled.div`
   }
   p {
     color: ${(props) => props.theme.colors.white};
-    font-size: 16px;
   }
   @media (max-width: 1024px) {
     max-width: 100%;
-    p {
-      font-size: 14px;
-    }
   }
 `;
 const FeatureIcons = () => {

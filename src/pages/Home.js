@@ -37,23 +37,16 @@ const HeroTextarea = styled.div`
   flex-direction: column;
   gap: 15px;
   h2 {
-    font-size: 48px;
     line-height: 56px;
     font-weight: 700;
-    color: #1d3e57;
+    color: ${({ theme }) => theme.colors.primary};
     margin: 0;
     @media (max-width: 991px) {
-      font-size: 36px;
       line-height: 48px;
     }
   }
   p {
-    color: #acacac;
-    font-size: 18px;
-    margin: 0;
-    @media (max-width: 991px) {
-      font-size: 14px;
-    }
+    color: ${({ theme }) => theme.colors.gray};
   }
 `;
 
@@ -89,19 +82,73 @@ const HeroImg = styled.div`
   }
 `;
 
+const FounderArea = styled.div`
+  position: relative;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  @media (max-width: 991px) {
+    flex-direction: column;
+  }
+`;
+
+const FounderImg = styled.img`
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  height: 100%;
+`;
+
+const FounderText = styled.div`
+  position: relative;
+  gap: 20px;
+  z-index: 1;
+  @media (max-width: 991px) {
+  }
+`;
+
+const TextContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 350px;
+  gap: 30px;
+  padding: 0 1rem;
+  @media (max-width: 991px) {
+    gap: 20px;
+  }
+`;
+const LeafImg = styled.img`
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  @media (max-width: 991px) {
+    display: none;
+  }
+`;
+
 const Home = () => {
   const imagePath = useImagePath();
   return (
     <>
       <HeroHome>
-        <Container>
+        <FounderImg />
+        <Container
+          style={{
+            padding: 0,
+          }}
+        >
           <HeroBox>
             <HeroContent>
               <HeroTextarea>
-                <h2>
+                <h1>
                   Velavie probiotics crafted to support every body's wellness
                   journey.
-                </h2>
+                </h1>
                 <p>
                   Velavie probiotics are crafted to support every body's
                   wellness journey. Rooted in microbiome science, each formula
@@ -142,6 +189,45 @@ const Home = () => {
       </HeroHome>
       <FeatureIcons />
       <PerfectPeace />
+      <FounderArea>
+        <FounderImg
+          src={`${imagePath}founder.png`}
+          srcSet={`
+                  ${imagePath}founder.png 1x,
+                  ${imagePath}founder@2x.png 2x,
+                  ${imagePath}founder@3x.png 3x
+                `}
+          alt="Founder Lili Hung"
+        />
+        <FounderText>
+          <TextContent>
+            <h2>Our Founder Lili Hung has Made Gut Health Simple</h2>
+            <p>
+              Since 2017, our founder Lili Hung has been at the forefront of
+              holistic wellness, inspired by her husband Kenji’s journey with
+              chronic fatigue and inflammation. Determined to find a natural
+              path to healing, Lili blended ancient Eastern wisdom with modern
+              science to create Velavie—a brand born from love, resilience, and
+              the belief that the body can thrive when given the right support.{" "}
+              <br></br>
+              <br></br>Today, Velavie’s proprietary blends feature rare
+              adaptogens and plant-based compounds designed to address energy,
+              hormonal balance, stress response, and immune strength. With every
+              carefully crafted formula, we make radiant health more
+              accessible—because wellness should feel natural, not overwhelming.
+            </p>
+          </TextContent>
+        </FounderText>
+        <LeafImg
+          src={`${imagePath}leaf.png`}
+          srcSet={`
+                  ${imagePath}leaf.png 1x,
+                  ${imagePath}leaf@2x.png 2x,
+                  ${imagePath}leaf@3x.png 3x
+                `}
+          alt="Founder Lili Hung"
+        />
+      </FounderArea>
     </>
   );
 };

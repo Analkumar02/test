@@ -23,20 +23,17 @@ const TitleArea = styled.div`
     line-height: 3.5rem;
     color: ${({ theme }) => theme.colors.primary};
     @media (max-width: 991px) {
-      font-size: 2.5rem;
       line-height: 3rem;
     }
     @media (max-width: 576px) {
-      font-size: 24px;
       line-height: 32px;
     }
   }
   p {
-    font-size: 1.125rem;
+    font-size: clamp(0.875rem, 0.7943rem + 0.3445vw, 1.125rem);
     line-height: 1.625rem;
     font-weight: 400;
     @media (max-width: 991px), (max-width: 576px) {
-      font-size: 14px;
       line-height: 26px;
     }
   }
@@ -84,7 +81,6 @@ const IconBox = styled.div`
     line-height: 2rem;
     text-transform: capitalize;
     @media (max-width: 991px), (max-width: 576px) {
-      font-size: 18px;
       line-height: 26px;
     }
     @media (max-width: 576px) {
@@ -92,9 +88,8 @@ const IconBox = styled.div`
     }
   }
   p {
-    font-size: 1rem;
+    font-size: clamp(0.75rem, 0.6693rem + 0.3445vw, 1rem);
     @media (max-width: 1240px) {
-      font-size: 14px;
       line-height: 26px;
     }
   }
@@ -119,7 +114,6 @@ const IconBox = styled.div`
       max-width: 200px;
     }
     @media (max-width: 576px) {
-      font-size: 14px;
       line-height: 26px;
     }
   }
@@ -186,7 +180,7 @@ const SocialMediaIcons = styled.div`
 
 const SocialIconLink = styled.a`
   color: ${({ theme }) => theme.colors.white};
-  font-size: 1.5rem;
+  font-size: clamp(1.125rem, 1.0039rem + 0.5168vw, 1.5rem);
   transition: color 0.3s ease;
   color: ${({ theme }) => theme.colors.white};
   &:hover {
@@ -198,7 +192,7 @@ const Copyright = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 18px;
+  font-size: clamp(0.875rem, 0.7943rem + 0.3445vw, 1.125rem);
   margin: 30px 0;
   img {
     max-width: 300px;
@@ -206,12 +200,11 @@ const Copyright = styled.div`
   @media (max-width: 991px) {
     flex-direction: column-reverse;
     gap: 10px;
-    font-size: 14px;
   }
 `;
 
 const FooterLinks = styled.div`
-  font-size: 1rem;
+  font-size: clamp(0.75rem, 0.6693rem + 0.3445vw, 1rem);
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -245,10 +238,6 @@ const FooterLinks = styled.div`
 
     &:hover {
       color: #fff;
-    }
-
-    @media (max-width: 991px) {
-      font-size: 14px;
     }
   }
 

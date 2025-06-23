@@ -31,7 +31,6 @@ export const Slide = styled.div`
       : "none"};
 
   @media (max-width: 768px) {
-    font-size: 12px;
     padding: 5px;
   }
 `;
@@ -103,7 +102,6 @@ export const IconsMob = styled.div`
   gap: 1rem;
 
   svg {
-    font-size: 1.5rem;
     color: ${({ theme }) => theme.colors.primary};
     cursor: pointer;
 
@@ -172,7 +170,6 @@ export const NavLinks = styled.div`
     position: relative;
     text-decoration: none;
     color: ${({ theme }) => theme.colors.primary};
-    font-size: 1rem;
     font-weight: ${({ theme }) => theme.fontWeights.regular};
     display: flex;
     align-items: center;
@@ -386,7 +383,7 @@ export const SearchSuggestionText = styled.div`
 `;
 
 export const SearchSuggestionName = styled.div`
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 0.9354rem + 0.2756vw, 1.2rem);
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   color: ${({ theme }) => theme.colors.primary};
   margin-bottom: 4px;
@@ -395,7 +392,7 @@ export const SearchSuggestionName = styled.div`
 `;
 
 export const SearchSuggestionDesc = styled.div`
-  font-size: 0.8rem;
+  font-size: clamp(0.75rem, 0.7339rem + 0.0689vw, 0.8rem);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -482,7 +479,7 @@ export const BlueButton = styled.button`
   justify-content: center;
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
-  font-size: 18px;
+  font-size: clamp(0.875rem, 0.7943rem + 0.3445vw, 1.125rem);
   font-weight: 600;
   padding: 20px 40px;
   border-radius: 10px;
@@ -505,7 +502,6 @@ export const BlueButton = styled.button`
   }
   @media (max-width: 991px) {
     padding: 10px 30px;
-    font-size: 14px;
     border-radius: 5px;
   }
 `;
@@ -516,7 +512,7 @@ export const WhiteButton = styled.button`
   justify-content: center;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.primary};
-  font-size: 18px;
+  font-size: clamp(0.875rem, 0.7943rem + 0.3445vw, 1.125rem);
   line-height: 1;
   font-weight: 600;
   padding: 20px 40px;
@@ -540,7 +536,6 @@ export const WhiteButton = styled.button`
   }
   @media (max-width: 991px) {
     padding: 10px 30px;
-    font-size: 14px;
     border-radius: 5px;
   }
 `;

@@ -1,22 +1,12 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 1536px;
+  margin: auto;
   padding-left: 1rem;
   padding-right: 1rem;
   box-sizing: border-box;
 
-  @media (min-width: 3840px) {
-    max-width: 2560px;
-  }
-  @media (max-width: 3840px) and (min-width: 2561px) {
-    max-width: 2560px;
-  }
-  @media (max-width: 2560px) and (min-width: 1921px) {
-    max-width: 1920px;
-  }
   @media (max-width: 1920px) and (min-width: 1537px) {
     max-width: 1536px;
   }
@@ -34,8 +24,10 @@ const Container = styled.div`
   }
   @media (max-width: 639px) {
     max-width: 100%;
+    width: 100%;
     padding-left: 1rem;
     padding-right: 1rem;
+    margin: 0;
   }
 `;
 

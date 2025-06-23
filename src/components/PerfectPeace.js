@@ -3,23 +3,20 @@ import { useImagePath } from "../context/ImagePathContext";
 import styled from "styled-components";
 
 const PerfectPeaceWrapper = styled.div`
-  padding: 80px 0;
+  padding: 100px 0;
   position: relative;
   @media (max-width: 767px) {
     padding: 40px 0;
   }
 `;
 const PerfectPeaceImg = styled.img`
-  max-width: 100%;
+  max-width: 350px;
   height: auto;
   position: absolute;
   right: 40px;
-  top: 0;
+  top: 30px;
   @media (max-width: 1536px) {
-    top: 40px;
-  }
-  @media (max-width: 1280px) {
-    top: 90px;
+    top: 70px;
   }
   @media (max-width: 1024px) {
     position: static;
@@ -77,11 +74,7 @@ const PerfectTextarea = styled.div`
   @media (max-width: 991px) {
     max-width: 100%;
     h2 {
-      font-size: 24px;
       line-height: 32px;
-    }
-    p {
-      font-size: 14px;
     }
   }
 `;
@@ -92,7 +85,7 @@ export const GreenButton = styled.button`
   justify-content: center;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.primary};
-  font-size: 18px;
+  font-size: clamp(0.875rem, 0.7943rem + 0.3445vw, 1.125rem);
   line-height: 1;
   font-weight: 600;
   padding: 20px 40px;
@@ -111,7 +104,6 @@ export const GreenButton = styled.button`
   }
   @media (max-width: 991px) {
     padding: 10px 30px;
-    font-size: 14px;
     border-radius: 5px;
   }
 `;

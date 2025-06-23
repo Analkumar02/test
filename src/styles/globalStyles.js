@@ -19,6 +19,46 @@ const GlobalStyle = createGlobalStyle`
         line-height: ${({ theme }) => theme.lineHeights.body};
         color: ${({ theme }) => theme.colors.body};
     }
+    @media screen and (min-width: 3001px) {
+        body {
+            zoom: 1.7;
+        }
+      }
+      @media screen and (max-width: 3000px) and (min-width: 2801px) {
+        body {
+            zoom: 1.6;
+        }
+      }
+      @media screen and (max-width: 2800px) and (min-width: 2601px) {
+        body {
+            zoom: 1.5;
+        }
+      }
+      @media screen and (max-width: 2600px) and (min-width: 2401px) {
+        body {
+            zoom: 1.4;
+        }
+      }
+      @media screen and (max-width: 2400px) and (min-width: 2201px) {
+        body {
+            zoom: 1.3;
+        }
+      }
+      @media only screen and (max-width: 2200px) and (min-width: 2001px) {
+        body {
+            zoom: 1.2;
+        }
+      }
+      @media only screen and (max-width: 2000px) and (min-width: 1801px) {
+        body {
+            zoom: 1.1;
+        }
+      }
+      @media only screen and (max-width: 1600px) and (min-width: 1201px) {
+        body {
+            zoom: normal;
+        }
+      }
     h1, h2, h3, h4, h5, h6 {
         font-family: ${({ theme }) => theme.fonts.heading};
         color: ${({ theme }) => theme.colors.primary};
