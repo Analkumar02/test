@@ -90,6 +90,7 @@ const FounderArea = styled.div`
   justify-content: space-between;
   @media (max-width: 991px) {
     flex-direction: column;
+    padding: 40px 0;
   }
 `;
 
