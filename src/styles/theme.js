@@ -7,7 +7,7 @@ export const theme = {
     gray: "#ACACAC",
     gray_lite: "#AFAFAF",
     white_lite: "#F5F5F5",
-    green_border: "#60983E",
+    green_border: "#60983e40",
     green_bg: "rgba(96, 152, 62, 0.1)",
     gold: "#FFD700",
     Whiteout: "#FBFBF5",

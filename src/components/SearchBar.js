@@ -109,29 +109,12 @@ const SearchBar = ({ isOpen, onClose }) => {
                   }
                 }}
               >
+                {" "}
                 <SearchSuggestionImage
                   src={
-                    p.slideshowImages && p.slideshowImages.length > 0
-                      ? `${imagePath}${p.slideshowImages[0]}`
+                    p.thumbnail
+                      ? `${imagePath}${p.thumbnail}`
                       : `${imagePath}${p.image || ""}`
-                  }
-                  srcSet={
-                    p.slideshowImages && p.slideshowImages.length >= 3
-                      ? `
-                        ${imagePath}${p.slideshowImages[0]} 1x,
-                        ${imagePath}${p.slideshowImages[1]} 2x,
-                        ${imagePath}${p.slideshowImages[2]} 3x
-                      `
-                      : p.slideshowImages && p.slideshowImages.length === 2
-                      ? `
-                        ${imagePath}${p.slideshowImages[0]} 1x,
-                        ${imagePath}${p.slideshowImages[1]} 2x
-                      `
-                      : p.slideshowImages && p.slideshowImages.length === 1
-                      ? `${imagePath}${p.slideshowImages[0]} 1x`
-                      : p.image
-                      ? `${imagePath}${p.image} 1x`
-                      : ""
                   }
                   alt={p.productName}
                 />

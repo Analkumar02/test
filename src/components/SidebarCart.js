@@ -343,7 +343,7 @@ const PRODUCT = {
   count: "60CT",
   orgprice: 21.99,
   price: 15.99,
-  image: "pr-img1.png",
+  image: "product1-thumbnail.png",
 };
 
 const FREE_SHIP_THRESHOLD = 75;

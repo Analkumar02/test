@@ -53,6 +53,7 @@
       "product1-image5@2x.jpg",
       "product1-image5@3x.jpg"
     ],
+    "thumbnail": "product1-thumbnail.png",
     "faq": [
       {
         "question": "Why it works",
@@ -130,6 +131,7 @@
       "product2-image5@2x.jpg",
       "product2-image5@3x.jpg"
     ],
+    "thumbnail": "product2-thumbnail.png",
     "faq": [
       {
         "question": " Why we created Simple Slumber",
@@ -207,6 +209,7 @@
       "product3-image5@2x.jpg",
       "product3-image5@3x.jpg"
     ],
+    "thumbnail": "product3-thumbnail.png",
     "faq": [
       {
         "question": " Why we created Antibiotic Antidote",
@@ -280,6 +283,7 @@
       "product4-image5@2x.jpg",
       "product4-image5@3x.jpg"
     ],
+    "thumbnail": "product4-thumbnail.png",
     "faq": [
       {
         "question": "  Why we created Heart Centered",
@@ -355,6 +359,7 @@
       "product5-image5@2x.jpg",
       "product5-image5@3x.jpg"
     ],
+    "thumbnail": "product5-thumbnail.png",
     "faq": [
       {
         "question": " Why we created Ideal Immunity",
