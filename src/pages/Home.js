@@ -5,6 +5,7 @@ import { BlueButton, WhiteButton } from "../components/HeaderStyled";
 import { useImagePath } from "../context/ImagePathContext";
 import FeatureIcons from "../components/FeatureIcons";
 import PerfectPeace from "../components/PerfectPeace";
+import ProductSlider from "../components/ProductSlider";
 import { Link } from "react-router-dom";
 
 const HeroHome = styled.div``;
@@ -141,6 +142,9 @@ const WhyUsArea = styled.div`
   gap: 40px;
   padding: 80px 0;
   background-color: ${({ theme }) => theme.colors.white_lite};
+  @media (max-width: 991px) {
+    padding: 40px 15px;
+  }
 `;
 
 const TitleArea = styled.div`
@@ -148,13 +152,23 @@ const TitleArea = styled.div`
   flex-direction: column;
   gap: 20px;
   align-items: center;
+  @media (max-width: 991px) {
+    text-align: center;
+  }
 `;
 
 const RatingText = styled.div`
   display: flex;
   gap: 10px;
+  align-items: center;
   color: ${({ theme }) => theme.colors.primary};
   font-size: clamp(0.75rem, 0.6289rem + 0.5168vw, 1.125rem);
+  img {
+    max-height: 14px;
+  }
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
 `;
 
 const WhyUsBox = styled.div`
@@ -164,8 +178,10 @@ const WhyUsBox = styled.div`
   flex-wrap: nowrap;
   @media (max-width: 991px) {
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-flow: wrap;
     align-items: center;
+    justify-content: space-around;
+    gap: 24px;
   }
 `;
 
@@ -179,6 +195,10 @@ const IconColLeft = styled.div`
   @media (max-width: 991px) {
     order: 2;
   }
+  @media (max-width: 767px) {
+    max-width: 100%;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.green_border};
+  }
 `;
 const IconColRight = styled.div`
   max-width: 300px;
@@ -188,6 +208,10 @@ const IconColRight = styled.div`
   justify-content: space-between;
   order: 3;
   @media (max-width: 991px) {
+    order: 3;
+  }
+  @media (max-width: 767px) {
+    max-width: 100%;
   }
 `;
 
@@ -417,6 +441,7 @@ const Home = () => {
           </WhyUsBox>
         </Container>
       </WhyUsArea>
+      <ProductSlider />
     </>
   );
 };
