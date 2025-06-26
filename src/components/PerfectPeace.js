@@ -83,8 +83,12 @@ export const GreenButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.primary};
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.white} 0%,
+    #f8f9fa 100%
+  );
+  color: ${({ theme }) => theme.colors.secondary};
   font-size: clamp(0.875rem, 0.7943rem + 0.3445vw, 1.125rem);
   line-height: 1;
   font-weight: 600;
@@ -92,16 +96,51 @@ export const GreenButton = styled.button`
   border-radius: 10px;
   text-transform: capitalize;
   text-decoration: none;
-  border: 1px solid ${({ theme }) => theme.colors.primary};
-  transition: all 0.5s;
+  border: 2px solid ${({ theme }) => theme.colors.secondary};
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
-  &:hover {
-    box-shadow: inset 7em 0 0 0 ${({ theme }) => theme.colors.secondary},
-      inset -7em 0 0 0 ${({ theme }) => theme.colors.secondary};
-    border: 1px solid ${({ theme }) => theme.colors.secondary};
-    color: ${({ theme }) => theme.colors.white};
-    background-color: ${({ theme }) => theme.colors.secondary};
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transition: left 0.5s ease;
   }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(70, 157, 117, 0.25),
+      0 4px 12px rgba(70, 157, 117, 0.15);
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.colors.secondary} 0%,
+      #3e8a5e 100%
+    );
+    color: ${({ theme }) => theme.colors.white};
+    border: 2px solid ${({ theme }) => theme.colors.secondary};
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(70, 157, 117, 0.2);
+  }
+
   @media (max-width: 991px) {
     padding: 10px 30px;
     border-radius: 5px;

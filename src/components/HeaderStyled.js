@@ -104,9 +104,44 @@ export const IconsMob = styled.div`
   svg {
     color: ${({ theme }) => theme.colors.primary};
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 50%;
+    position: relative;
+    overflow: visible;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      width: calc(100% + 8px);
+      height: calc(100% + 8px);
+      background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(29, 62, 87, 0.1) 50%,
+        transparent 100%
+      );
+      border-radius: 50%;
+      transform: scale(0);
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: -1;
+    }
 
     &:hover {
-      scale: 1.1;
+      transform: translateY(-1px);
+      color: ${({ theme }) => theme.colors.primary};
+      box-shadow: 0 3px 12px rgba(29, 62, 87, 0.12),
+        0 1px 6px rgba(29, 62, 87, 0.08);
+
+      &::before {
+        transform: scale(1);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 6px rgba(29, 62, 87, 0.08);
     }
   }
 `;
@@ -115,12 +150,79 @@ export const CartIconWrapperMob = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  overflow: visible;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    background: radial-gradient(
+      circle,
+      rgba(70, 157, 117, 0.08) 0%,
+      rgba(70, 157, 117, 0.04) 50%,
+      transparent 80%
+    );
+    border-radius: 50%;
+    transform: scale(0);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: -1;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: calc(100% + 6px);
+    height: calc(100% + 6px);
+    border: 1.5px solid transparent;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: -1;
+  }
+
+  svg {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  &:hover {
+    transform: scale(1.08);
+
+    &::before {
+      transform: scale(1);
+    }
+
+    &::after {
+      border-color: rgba(70, 157, 117, 0.3);
+      transform: scale(1.15);
+    }
+
+    svg {
+      color: ${({ theme }) => theme.colors.secondary};
+      filter: drop-shadow(0 1px 3px rgba(70, 157, 117, 0.2));
+    }
+  }
+
+  &:active {
+    transform: scale(1.03);
+    
+    &::after {
+      transform: scale(1.08);
+    }
+  }
 `;
 
 export const CartCountBadgeMob = styled.div`
   position: absolute;
-  top: -5px;
-  right: -10px;
+  top: -6px;
+  right: -6px;
   background-color: ${({ theme }) => theme.colors.secondary};
   color: ${({ theme }) => theme.colors.white};
   font-size: 0.75rem;
@@ -131,6 +233,9 @@ export const CartCountBadgeMob = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
+  border: 2px solid ${({ theme }) => theme.colors.white};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const HeaderContainer = styled.div`
@@ -211,27 +316,131 @@ export const Icons = styled.div`
   max-width: 400px;
   width: 100%;
   position: relative;
+  align-items: center;
 
   svg {
     font-size: 1.5rem;
     color: ${({ theme }) => theme.colors.primary};
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 50%;
+    position: relative;
+    overflow: visible;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      width: calc(100% + 12px);
+      height: calc(100% + 12px);
+      background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(29, 62, 87, 0.1) 50%,
+        transparent 100%
+      );
+      border-radius: 50%;
+      transform: scale(0);
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: -1;
+    }
 
     &:hover {
-      scale: 1.1;
+      transform: translateY(-2px);
+      color: ${({ theme }) => theme.colors.primary};
+      box-shadow: 0 4px 15px rgba(29, 62, 87, 0.15),
+        0 2px 8px rgba(29, 62, 87, 0.1);
+
+      &::before {
+        transform: scale(1);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(29, 62, 87, 0.1);
     }
   }
 `;
 
 export const CartIconWrapper = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  overflow: visible;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    width: calc(100% + 16px);
+    height: calc(100% + 16px);
+    background: radial-gradient(
+      circle,
+      rgba(70, 157, 117, 0.08) 0%,
+      rgba(70, 157, 117, 0.04) 50%,
+      transparent 80%
+    );
+    border-radius: 50%;
+    transform: scale(0);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: -1;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    border: 2px solid transparent;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: -1;
+  }
+
+  svg {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  &:hover {
+    transform: scale(1.1);
+
+    &::before {
+      transform: scale(1);
+    }
+
+    &::after {
+      border-color: rgba(70, 157, 117, 0.3);
+      transform: scale(1.2);
+    }
+
+    svg {
+      color: ${({ theme }) => theme.colors.secondary};
+      filter: drop-shadow(0 2px 4px rgba(70, 157, 117, 0.2));
+    }
+  }
+
+  &:active {
+    transform: scale(1.05);
+    
+    &::after {
+      transform: scale(1.1);
+    }
+  }
 `;
 
 export const CartCountBadge = styled.div`
   position: absolute;
-  top: 0;
-  right: -10px;
+  top: -8px;
+  right: -8px;
   background-color: ${({ theme }) => theme.colors.secondary};
   color: ${({ theme }) => theme.colors.white};
   font-size: 0.75rem;
@@ -242,6 +451,9 @@ export const CartCountBadge = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
+  border: 2px solid ${({ theme }) => theme.colors.white};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const searchSlideDown = keyframes`
@@ -477,32 +689,73 @@ export const BlueButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.primary} 0%,
+    #154a6b 100%
+  );
   color: ${({ theme }) => theme.colors.white};
   font-size: clamp(0.875rem, 0.7943rem + 0.3445vw, 1.125rem);
   font-weight: 600;
   padding: 20px 40px;
-  border-radius: 10px;
+  border-radius: 12px;
   text-transform: capitalize;
   text-decoration: none;
-  border: 1px solid ${({ theme }) => theme.colors.primary};
-  transition: all 0.5s;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s ease;
+  }
+
   a {
     color: ${({ theme }) => theme.colors.white};
+    text-decoration: none;
   }
+
   &:hover {
-    box-shadow: inset 6em 0 0 0 ${({ theme }) => theme.colors.white},
-      inset -6em 0 0 0 ${({ theme }) => theme.colors.white};
-    border: 1px solid ${({ theme }) => theme.colors.primary};
-    background-color: ${({ theme }) => theme.colors.white};
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(29, 62, 87, 0.3),
+      0 4px 12px rgba(29, 62, 87, 0.2);
+    background: linear-gradient(
+      135deg,
+      #1a4a6b 0%,
+      ${({ theme }) => theme.colors.primary} 100%
+    );
+
+    &::before {
+      left: 100%;
+    }
+
     a {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.colors.white};
     }
   }
+
+  &:active {
+    transform: translateY(0);
+  }
+
   @media (max-width: 991px) {
-    padding: 10px 30px;
-    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 10px;
   }
 `;
 
@@ -510,7 +763,11 @@ export const WhiteButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.white};
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.white} 0%,
+    #f8f9fa 100%
+  );
   color: ${({ theme }) => theme.colors.primary};
   font-size: clamp(0.875rem, 0.7943rem + 0.3445vw, 1.125rem);
   line-height: 1;
@@ -519,21 +776,60 @@ export const WhiteButton = styled.button`
   border-radius: 10px;
   text-transform: capitalize;
   text-decoration: none;
-  border: 1px solid ${({ theme }) => theme.colors.primary};
-  transition: all 0.5s;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transition: left 0.5s ease;
+  }
+
   a {
     color: ${({ theme }) => theme.colors.primary};
+    transition: color 0.3s ease;
   }
+
   &:hover {
-    box-shadow: inset 7em 0 0 0 ${({ theme }) => theme.colors.primary},
-      inset -7em 0 0 0 ${({ theme }) => theme.colors.primary};
-    border: 1px solid ${({ theme }) => theme.colors.primary};
-    background-color: ${({ theme }) => theme.colors.primary};
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(29, 62, 87, 0.25),
+      0 4px 12px rgba(29, 62, 87, 0.15);
+    background: linear-gradient(
+      135deg,
+      ${({ theme }) => theme.colors.primary} 0%,
+      #154a6b 100%
+    );
+    color: ${({ theme }) => theme.colors.white};
+    border: 2px solid ${({ theme }) => theme.colors.primary};
+
+    &::before {
+      left: 100%;
+    }
+
     a {
       color: ${({ theme }) => theme.colors.white};
     }
   }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(29, 62, 87, 0.2);
+  }
+
   @media (max-width: 991px) {
     padding: 10px 30px;
     border-radius: 5px;
