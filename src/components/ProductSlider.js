@@ -350,14 +350,14 @@ const ProductButton = styled(Link)`
   }
 `;
 
-const ProductSlider = () => {
+const ProductSlider = ({ hideTitle = false }) => {
   const imagePath = useImagePath();
 
   return (
     <ProductArea>
       <Container>
         <ProductBox>
-          <h2>Explore Our Probiotic Range</h2>
+          {!hideTitle && <h2>Explore Our Probiotic Range</h2>}
           <StyledSwiper
             modules={[Navigation]}
             slidesPerView={4}

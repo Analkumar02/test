@@ -6,7 +6,8 @@ import { useImagePath } from "../context/ImagePathContext";
 import FeatureIcons from "../components/FeatureIcons";
 import PerfectPeace from "../components/PerfectPeace";
 import ProductSlider from "../components/ProductSlider";
-import { Link } from "react-router-dom";
+import ComparisonTable from "../components/ComparisonTable";
+import { useNavigate } from "react-router-dom";
 
 const HeroHome = styled.div``;
 const HeroBox = styled.div`
@@ -258,17 +259,64 @@ const WhyUsImg = styled.img`
   height: auto;
 `;
 
+const FutureArea = styled.div`
+  padding: 20px 0 80px;
+  @media (max-width: 991px) {
+    padding: 20px 15px 40px;
+  }
+`;
+
+const FutureBox = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 50px;
+  @media (max-width: 991px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+const FutureItem = styled.div`
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  text-align: center;
+  h4 {
+    color: ${({ theme }) => theme.colors.secondary};
+  }
+  img {
+    max-width: 50px;
+    padding: 5px;
+  }
+  @media (max-width: 991px) {
+    max-width: 100%;
+    margin-bottom: 40px;
+    gap: 10px;
+  }
+`;
+
 const Home = () => {
   const imagePath = useImagePath();
+  const navigate = useNavigate();
+
+  const handleShopNowClick = () => {
+    navigate("/shop");
+  };
+
+  const handleTakeQuizClick = () => {
+    navigate("/");
+  };
+
+  const handleShopAllClick = () => {
+    navigate("/shop");
+  };
+
   return (
     <>
       <HeroHome>
-        <FounderImg />
-        <Container
-          style={{
-            padding: 0,
-          }}
-        >
+        <Container>
           <HeroBox>
             <HeroContent>
               <HeroTextarea>
@@ -285,11 +333,9 @@ const Home = () => {
                 </p>
               </HeroTextarea>
               <HeroBtnBox>
-                <BlueButton>
-                  <Link to="/shop">shop now</Link>
-                </BlueButton>
-                <WhiteButton>
-                  <Link to="/">take the quiz</Link>
+                <BlueButton onClick={handleShopNowClick}>shop now</BlueButton>
+                <WhiteButton onClick={handleTakeQuizClick}>
+                  take the quiz
                 </WhiteButton>
               </HeroBtnBox>
               <HeroBadges>
@@ -406,8 +452,11 @@ const Home = () => {
                 `}
                 alt="Why Velavie is Better"
               />
-              <BlueButton style={{ maxWidth: "300px", width: "100%" }}>
-                <Link to="/shop">shop all</Link>
+              <BlueButton
+                style={{ maxWidth: "300px", width: "100%" }}
+                onClick={handleShopAllClick}
+              >
+                shop all
               </BlueButton>
             </WhyUsImgBox>
             <IconColRight>
@@ -442,6 +491,42 @@ const Home = () => {
         </Container>
       </WhyUsArea>
       <ProductSlider />
+      <ComparisonTable />
+      <FutureArea>
+        <Container>
+          <TitleArea>
+            <h4>Experience the Difference</h4>
+            <h2>Looking to the Future: Beyond 90 Days</h2>
+          </TitleArea>
+          <FutureBox>
+            <FutureItem>
+              <img src={`${imagePath}future1.png`} alt="Future Icon" />
+              <h4>Continued Benefits</h4>
+              <p>
+                Consistent probiotic use over time supports stronger immunity,
+                greater resilience, and improved overall wellness.
+              </p>
+            </FutureItem>
+            <FutureItem>
+              <img src={`${imagePath}future2.png`} alt="Future Icon" />
+              <h4>Explore More Velavie Formulas</h4>
+              <p>
+                Products like Simple Slumber and Antibiotic Antidote are
+                designed to support specific health goals as you continue your
+                wellness journey.
+              </p>
+            </FutureItem>
+            <FutureItem>
+              <img src={`${imagePath}future3.png`} alt="Future Icon" />
+              <h4>Balance Starts Daily</h4>
+              <p>
+                For holistic health, pair probiotics with a balanced diet,
+                regular exercise, and effective stress management.
+              </p>
+            </FutureItem>
+          </FutureBox>
+        </Container>
+      </FutureArea>
     </>
   );
 };

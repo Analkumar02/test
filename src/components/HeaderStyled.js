@@ -212,7 +212,7 @@ export const CartIconWrapperMob = styled.div`
 
   &:active {
     transform: scale(1.03);
-    
+
     &::after {
       transform: scale(1.08);
     }
@@ -430,7 +430,7 @@ export const CartIconWrapper = styled.div`
 
   &:active {
     transform: scale(1.05);
-    
+
     &::after {
       transform: scale(1.1);
     }
@@ -724,12 +724,8 @@ export const BlueButton = styled.button`
     transition: left 0.5s ease;
   }
 
-  a {
-    color: ${({ theme }) => theme.colors.white};
-    text-decoration: none;
-  }
-
   &:hover {
+    color: ${({ theme }) => theme.colors.white};
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(29, 62, 87, 0.3),
       0 4px 12px rgba(29, 62, 87, 0.2);
