@@ -194,8 +194,8 @@ const ProductSlide = styled.div`
   .image-container {
     position: relative;
     width: 100%;
-    max-width: 200px;
-    height: 200px;
+    max-width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -204,13 +204,13 @@ const ProductSlide = styled.div`
     background: radial-gradient(circle at center, #fafbfc 0%, #f1f3f4 100%);
 
     @media (max-width: 768px) {
-      max-width: 180px;
-      height: 180px;
+      max-width: 100%;
+      height: 100%;
     }
 
     @media (max-width: 480px) {
-      max-width: 160px;
-      height: 160px;
+      max-width: 100%;
+      height: 100%;
     }
   }
 
