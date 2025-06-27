@@ -57,11 +57,6 @@ const TableWrapper = styled.div`
     background: #c1c1c1;
     border-radius: 4px;
   }
-
-  @media (max-width: 768px) {
-    margin: 0 15px;
-    border-radius: 8px;
-  }
 `;
 
 const StyledTable = styled.table`
@@ -138,7 +133,7 @@ const TableBody = styled.tbody`
     position: -webkit-sticky;
     position: sticky;
     left: 0;
-    z-index: 998;
+    z-index: 90;
   }
 
   tr:nth-child(odd) td:first-child {
@@ -146,7 +141,7 @@ const TableBody = styled.tbody`
     position: -webkit-sticky;
     position: sticky;
     left: 0;
-    z-index: 998;
+    z-index: 90;
   }
 `;
 
