@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Container from "./Container";
 import { Icon } from "@iconify/react";
+import { shouldForwardProp } from "styled-components";
 
 // Styled Components
 const TableSection = styled.div`
@@ -86,22 +87,39 @@ const TableHeadCell = styled.th`
   border-right: 1px solid ${({ theme }) => theme.colors.gray_lite};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray_lite};
   background: ${({ theme }) => theme.colors.white};
+  min-width: 220px;
+  width: 220px;
 
   &:first-child {
     text-align: left;
     font-weight: ${({ theme }) => theme.fontWeights.bold};
     border-top-left-radius: 12px;
-    min-width: 200px;
-    width: 200px;
     position: -webkit-sticky;
     position: sticky;
     left: 0;
-    z-index: 999;
+    z-index: 2;
     background: ${({ theme }) => theme.colors.white};
-    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.04);
+    min-width: 220px;
+    width: 220px;
+    max-width: 220px;
+
+    @media (max-width: 768px) {
+      min-width: 160px;
+      width: 160px;
+      max-width: 160px;
+    }
 
     /* Force the sticky behavior */
     transform: translateX(0);
+  }
+
+  &:not(:first-child) {
+    @media (max-width: 768px) {
+      min-width: 100px;
+      width: 100px;
+      max-width: 100px;
+    }
   }
 
   &:last-child {
@@ -134,6 +152,7 @@ const TableBody = styled.tbody`
     position: sticky;
     left: 0;
     z-index: 90;
+    width: 300px;
   }
 
   tr:nth-child(odd) td:first-child {
@@ -142,6 +161,7 @@ const TableBody = styled.tbody`
     position: sticky;
     left: 0;
     z-index: 90;
+    width: 300px;
   }
 `;
 
@@ -158,19 +178,21 @@ const TableCell = styled.td`
   font-weight: ${({ theme }) => theme.fontWeights.body};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray_lite};
   border-right: 1px solid ${({ theme }) => theme.colors.gray_lite};
+  min-width: 160px;
+  width: 160px;
 
   &:first-child {
     text-align: left;
     font-weight: ${({ theme }) => theme.fontWeights.medium};
     color: ${({ theme }) => theme.colors.body};
-    min-width: 200px;
-    width: 200px;
+    min-width: 220px;
+    width: 220px;
     position: -webkit-sticky;
     position: sticky;
     left: 0;
-    z-index: 998;
+    z-index: 2;
     background: ${({ theme }) => theme.colors.white};
-    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.04);
 
     /* Force the sticky behavior */
     transform: translateX(0);
@@ -186,7 +208,7 @@ const TableCell = styled.td`
   }
 `;
 
-const CheckIcon = styled(Icon)`
+const CheckIcon = styled(({ productColor, ...rest }) => <Icon {...rest} />)`
   color: ${({ productColor }) => productColor || "#60986E"};
   width: 50px;
   height: 50px;

@@ -5,7 +5,7 @@ import styled from "styled-components";
 const PerfectPeaceWrapper = styled.div`
   padding: 100px 0;
   position: relative;
-  @media (max-width: 767px) {
+  @media (max-width: 991px) {
     padding: 40px 0;
   }
 `;

@@ -59,26 +59,39 @@ export const Topbar = styled.div`
 `;
 
 export const HeaderWrapper = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 100;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray_lite};
-
+  transition: box-shadow 0.3s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1; // Always visible
+  transform: translateY(0); // Always at top
+  box-shadow: ${({ $isSticky }) =>
+    $isSticky ? "0 2px 16px rgba(0,0,0,0.08)" : "none"};
+  // Only animate shadow on scroll
   @media (max-width: 768px) {
     display: none;
   }
 `;
 
 export const HeaderWrapperMob = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: none;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray_lite};
-  position: ${({ $isSticky }) => ($isSticky ? "fixed" : "relative")};
-  top: ${({ $isSticky }) => ($isSticky ? "0" : "auto")};
-  left: 0;
-  z-index: 100;
   height: 56px;
-
+  transition: box-shadow 0.3s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1; // Always visible
+  transform: translateY(0); // Always at top
+  box-shadow: ${({ $isSticky }) =>
+    $isSticky ? "0 2px 16px rgba(0,0,0,0.08)" : "none"};
   @media (max-width: 768px) {
     display: flex;
     justify-content: space-between;

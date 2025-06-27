@@ -6,6 +6,7 @@ import { useImagePath } from "../context/ImagePathContext";
 import FeatureIcons from "../components/FeatureIcons";
 import PerfectPeace from "../components/PerfectPeace";
 import ProductSlider from "../components/ProductSlider";
+import AppDownload from "../components/AppDownload";
 import { useNavigate } from "react-router-dom";
 
 const HeroHome = styled.div``;
@@ -525,6 +526,7 @@ const Home = () => {
           </FutureBox>
         </Container>
       </FutureArea>
+      <AppDownload />
     </>
   );
 };

@@ -71,7 +71,7 @@ const Header = () => {
         })}
       </Topbar>
       {/* Desktop Header */}
-      <HeaderWrapper>
+      <HeaderWrapper $isSticky={isSticky} $atTop={!isSticky}>
         <Container>
           <HeaderContainer>
             <NavLinks>
@@ -123,7 +123,7 @@ const Header = () => {
         </Container>
       </HeaderWrapper>
       {/* Mobile Header */}
-      <HeaderWrapperMob $isSticky={isSticky}>
+      <HeaderWrapperMob $isSticky={isSticky} $atTop={!isSticky}>
         <Container>
           <HeaderContainerMob>
             <LogoMob>
