@@ -1,4 +1,3 @@
-import React from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
 import GlobalStyle from "./styles/globalStyles";
@@ -11,6 +10,7 @@ import Shop from "./pages/Shop";
 import Product from "./pages/Product";
 import CheckOut from "./pages/CheckOut";
 import ThankYou from "./pages/ThankYou";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -30,6 +30,7 @@ function App() {
             <Route path="/product/:id" element={<Product />} />
             <Route path="/checkout" element={<CheckOut />} />
             <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
           <Footer />
         </Router>

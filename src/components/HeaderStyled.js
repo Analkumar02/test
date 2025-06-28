@@ -240,12 +240,17 @@ export const CartCountBadgeMob = styled.div`
   color: ${({ theme }) => theme.colors.white};
   font-size: 0.75rem;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
-  width: 20px;
+  min-width: 20px;
   height: 20px;
-  border-radius: 50%;
-  display: flex;
+  padding: 0 4px;
+  border-radius: 10px;
+  display: ${(props) => (Number(props.children) > 0 ? "flex" : "none")};
   justify-content: center;
   align-items: center;
+  z-index: 10;
+  border: 2px solid ${({ theme }) => theme.colors.white};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
   z-index: 10;
   border: 2px solid ${({ theme }) => theme.colors.white};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -458,15 +463,34 @@ export const CartCountBadge = styled.div`
   color: ${({ theme }) => theme.colors.white};
   font-size: 0.75rem;
   font-weight: ${({ theme }) => theme.fontWeights.bold};
-  width: 20px;
+  min-width: 20px;
   height: 20px;
-  border-radius: 50%;
-  display: flex;
+  padding: 0 4px;
+  border-radius: 10px;
+  display: ${(props) => (Number(props.children) > 0 ? "flex" : "none")};
   justify-content: center;
   align-items: center;
   z-index: 10;
   border: 2px solid ${({ theme }) => theme.colors.white};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  transform-origin: center;
+
+  &:not(:empty) {
+    animation: pulse 1s;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.8);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 `;
 
 export const searchSlideDown = keyframes`

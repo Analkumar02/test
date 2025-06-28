@@ -35,6 +35,14 @@ const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
 
+  // Initialize cart count from localStorage
+  useEffect(() => {
+    const storedCount = localStorage.getItem("cartCount");
+    if (storedCount) {
+      setCartCount(parseInt(storedCount, 10));
+    }
+  }, []);
+
   const slides = [
     { text: "FREE SHIPPING ON DOMESTIC ORDERS OVER $75", gradient: Slide1 },
     { text: "50,000+ happy customers", gradient: Slide2 },
@@ -194,7 +202,11 @@ const Header = () => {
       )}
       {/* Sidebar Cart */}
       {isCartVisible && (
-        <SidebarCart isVisible={isCartVisible} onClose={toggleCart} />
+        <SidebarCart
+          isVisible={isCartVisible}
+          onClose={toggleCart}
+          onCartUpdate={setCartCount}
+        />
       )}
     </>
   );

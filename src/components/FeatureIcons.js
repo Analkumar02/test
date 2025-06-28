@@ -1,4 +1,3 @@
-import React from "react";
 import Container from "./Container";
 import { useImagePath } from "../context/ImagePathContext";
 import styled from "styled-components";
