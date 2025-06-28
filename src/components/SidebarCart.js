@@ -4,6 +4,8 @@ import { useImagePath } from "../context/ImagePathContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import productData from "../data/product.json";
+import { SidebarLoader } from "./LoadingComponents";
+import { updateCartWithDelay } from "../utils/cartUtils";
 
 // Animations
 const slideIn = keyframes`
@@ -654,6 +656,8 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
   const [subtotal, setSubtotal] = useState(0);
   const [orgSubtotal, setOrgSubtotal] = useState(0);
   const [suggestedProducts, setSuggestedProducts] = useState([]);
+  const [isCartUpdating, setIsCartUpdating] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
 
   // Subscription state
   const [openSubscription, setOpenSubscription] = useState(null);
@@ -684,8 +688,26 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
     setOpenSelect(openSelect === itemId ? null : itemId);
   };
 
+  // Helper function to simulate backend processing and update cart
+  const updateCartWithDelayLocal = async (
+    updatedCartItems,
+    message = "Updating cart..."
+  ) => {
+    try {
+      await updateCartWithDelay(
+        updatedCartItems,
+        setIsCartUpdating,
+        setLoadingMessage,
+        message
+      );
+      setCartItems(updatedCartItems);
+    } catch (error) {
+      console.error("Error updating cart:", error);
+    }
+  };
+
   // Function to select delivery option
-  const selectDeliveryOption = (itemId, option) => {
+  const selectDeliveryOption = async (itemId, option) => {
     setSelectedDelivery({
       ...selectedDelivery,
       [itemId]: option,
@@ -712,12 +734,14 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
       return item;
     });
 
-    setCartItems(updatedItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    await updateCartWithDelayLocal(
+      updatedItems,
+      "Upgrading to subscription..."
+    );
   };
 
   // Function to remove subscription and revert to one-time purchase
-  const removeSubscription = (itemId) => {
+  const removeSubscription = async (itemId) => {
     const updatedItems = cartItems.map((item) => {
       if (item.id === itemId) {
         // Get product data to access original pricing
@@ -737,8 +761,7 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
       return item;
     });
 
-    setCartItems(updatedItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    await updateCartWithDelayLocal(updatedItems, "Removing subscription...");
 
     // Remove from selected delivery options
     const newSelectedDelivery = { ...selectedDelivery };
@@ -925,21 +948,19 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
     generateSuggestions();
   }, [cartItems]);
 
-  const handleUpdateQuantity = (itemId, newQuantity) => {
+  const handleUpdateQuantity = async (itemId, newQuantity) => {
     if (newQuantity < 1) return;
 
     const updatedItems = cartItems.map((item) =>
       item.id === itemId ? { ...item, quantity: newQuantity } : item
     );
 
-    setCartItems(updatedItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    await updateCartWithDelayLocal(updatedItems, "Updating quantity...");
   };
 
-  const handleRemoveItem = (itemId) => {
+  const handleRemoveItem = async (itemId) => {
     const updatedItems = cartItems.filter((item) => item.id !== itemId);
-    setCartItems(updatedItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    await updateCartWithDelayLocal(updatedItems, "Removing item...");
   };
   const handleCheckoutClick = (e) => {
     e.preventDefault();
@@ -992,7 +1013,7 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
     }, 50);
   };
 
-  const handleAddSuggestedProduct = (productId) => {
+  const handleAddSuggestedProduct = async (productId) => {
     // Find the product in product data
     const productToAdd = productData.find(
       (product) => product.id === productId
@@ -1005,7 +1026,7 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
 
     if (existingProduct) {
       // Update quantity if already in cart
-      handleUpdateQuantity(productId, existingProduct.quantity + 1);
+      await handleUpdateQuantity(productId, existingProduct.quantity + 1);
     } else {
       // Create a new cart item
       const newItem = {
@@ -1022,8 +1043,10 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
 
       // Add to cart
       const updatedItems = [...cartItems, newItem];
-      setCartItems(updatedItems);
-      localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+      await updateCartWithDelayLocal(
+        updatedItems,
+        "Adding suggested product..."
+      );
     }
   };
 
@@ -1079,6 +1102,10 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
       {animationState && <Overlay isVisible={isVisible} onClick={onClose} />}
       {animationState && (
         <SidebarWrapper isVisible={isVisible} ref={cartRef}>
+          <SidebarLoader
+            isVisible={isCartUpdating}
+            message={loadingMessage || "Updating cart..."}
+          />
           <CartBody>
             <CartTitle>
               <p>Your Cart</p>

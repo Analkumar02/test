@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Container from "./Container";
 import { Icon } from "@iconify/react";
-import { shouldForwardProp } from "styled-components";
 
 // Styled Components
 const TableSection = styled.div`

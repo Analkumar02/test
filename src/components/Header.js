@@ -41,6 +41,19 @@ const Header = () => {
     if (storedCount) {
       setCartCount(parseInt(storedCount, 10));
     }
+
+    // Listen for cart count updates from other components
+    const handleCartCountUpdate = (e) => {
+      if (e.detail && typeof e.detail.cartCount === "number") {
+        setCartCount(e.detail.cartCount);
+      }
+    };
+
+    window.addEventListener("cartCountUpdate", handleCartCountUpdate);
+
+    return () => {
+      window.removeEventListener("cartCountUpdate", handleCartCountUpdate);
+    };
   }, []);
 
   const slides = [
