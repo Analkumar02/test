@@ -364,7 +364,7 @@ function CheckOut() {
     }
 
     cartInitializedRef.current = true;
-  }, []);
+  }, [location.state]);
 
   useEffect(() => {
     const calcSubtotal = cartItems.reduce(
