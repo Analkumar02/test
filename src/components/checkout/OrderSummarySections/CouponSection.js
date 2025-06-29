@@ -73,6 +73,21 @@ const CouponTag = styled.div`
   }
 `;
 
+const RemoveCouponButton = styled.button`
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 0 4px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
 const CouponErrorMessage = styled.div`
   background: #fee2e2;
   border: 1px solid #fecaca;
@@ -99,6 +114,25 @@ const CouponSuggestion = styled.div`
   gap: 8px;
 `;
 
+const Spinner = styled.div`
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.7s linear infinite;
+  margin-left: 6px;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 /**
  * CouponSection component for handling coupon input and display
  */
@@ -106,10 +140,13 @@ const CouponSection = ({
   formData,
   handleInputChange,
   handleCouponApply,
+  handleCouponRemove,
   couponApplied,
   couponError,
   showCouponSuggestion,
   couponDiscount,
+  isSubscription,
+  couponLoading,
 }) => {
   return (
     <CouponSectionWrapper>
@@ -120,8 +157,21 @@ const CouponSection = ({
           value={formData.promoCode}
           onChange={handleInputChange}
           name="promoCode"
+          disabled={isSubscription || couponLoading}
         />
-        <CouponButton onClick={handleCouponApply}>Apply</CouponButton>
+        <CouponButton
+          onClick={handleCouponApply}
+          disabled={isSubscription || couponLoading}
+        >
+          {couponLoading ? (
+            <>
+              Applying
+              <Spinner />
+            </>
+          ) : (
+            "Apply"
+          )}
+        </CouponButton>
       </CouponBox>
 
       {/* Show coupon success message */}
@@ -131,6 +181,22 @@ const CouponSection = ({
             <Icon icon="mdi:check-circle" width="16" height="16" />
             <span className="discount-text">10% OFF</span>
             applied to one-time purchases!
+            <RemoveCouponButton
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleCouponRemove(e);
+              }}
+              type="button"
+              title="Remove coupon"
+              disabled={couponLoading}
+            >
+              {couponLoading ? (
+                <Spinner />
+              ) : (
+                <Icon icon="mdi:close" width="16" height="16" />
+              )}
+            </RemoveCouponButton>
           </CouponTag>
         </div>
       )}
@@ -144,11 +210,19 @@ const CouponSection = ({
       )}
 
       {/* Show coupon suggestion */}
-      {showCouponSuggestion && !couponApplied && (
+      {showCouponSuggestion && !couponApplied && !isSubscription && (
         <CouponSuggestion>
           <Icon icon="mdi:lightbulb-outline" width="16" height="16" />
           Try "SAVE10" or "DISCOUNT10" for 10% off on one-time purchases
         </CouponSuggestion>
+      )}
+
+      {/* Show subscription message */}
+      {isSubscription && (
+        <CouponErrorMessage>
+          <Icon icon="mdi:information-outline" width="16" height="16" />
+          Coupons cannot be applied to subscription products
+        </CouponErrorMessage>
       )}
     </CouponSectionWrapper>
   );

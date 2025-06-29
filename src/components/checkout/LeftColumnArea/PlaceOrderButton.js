@@ -11,7 +11,12 @@ const PlaceOrderButtonWrapper = styled(ButtonBase)`
  */
 const PlaceOrderButton = ({ handleFormSubmit }) => {
   return (
-    <PlaceOrderButtonWrapper type="submit" onClick={handleFormSubmit}>
+    <PlaceOrderButtonWrapper
+      onClick={(e) => {
+        e.preventDefault();
+        handleFormSubmit(e);
+      }}
+    >
       Place Order
     </PlaceOrderButtonWrapper>
   );

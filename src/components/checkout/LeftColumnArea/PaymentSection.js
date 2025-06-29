@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useImagePath } from "../../../context/ImagePathContext";
 import {
   FormSection,
   SectionTitle,
@@ -63,6 +64,9 @@ const PaymentSection = ({
   cvvMasked,
   setFormData,
 }) => {
+  // Get image path from context
+  const imagePath = useImagePath();
+
   // Payment method group
   const PaymentMethodGroup = OptionGroup;
   const PaymentOption = Option;
@@ -124,7 +128,7 @@ const PaymentSection = ({
             Credit card
           </div>
           <img
-            src={`${formData.imagePath}creditcards.png`}
+            src={(imagePath ? imagePath : "/images/") + "creditcards.png"}
             alt="Credit Card"
             style={{
               height: "28px",
@@ -185,8 +189,8 @@ const PaymentSection = ({
                 />
                 {formData.cardNumber.startsWith("2222") && (
                   <img
-                    src={`${formData.imagePath}visa.png`}
-                    alt="Visa"
+                    src={(imagePath ? imagePath : "/images/") + "visa.png"}
+                    alt="Visa Card"
                     style={{
                       position: "absolute",
                       right: 16,

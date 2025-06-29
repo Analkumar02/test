@@ -402,6 +402,16 @@ function CheckOut() {
     }
   };
 
+  const handleCouponRemove = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setCouponApplied(false);
+    setCouponError("");
+    setFormData((prev) => ({ ...prev, promoCode: "" }));
+  };
+
   const handleCouponApply = () => {
     const couponCode = formData.promoCode.trim().toUpperCase();
 
@@ -814,7 +824,7 @@ function CheckOut() {
 
       <CheckoutContainer>
         <Container>
-          <form onSubmit={handleFormSubmit}>
+          <form onSubmit={(e) => e.preventDefault()}>
             <CheckoutLayout>
               <LeftColumnSection
                 formData={formData}
@@ -839,6 +849,7 @@ function CheckOut() {
                 couponDiscount={couponDiscount}
                 formData={formData}
                 handleCouponApply={handleCouponApply}
+                handleCouponRemove={handleCouponRemove}
                 couponError={couponError}
                 showCouponSuggestion={showCouponSuggestion}
                 hasDemoProduct={hasDemoProduct}
