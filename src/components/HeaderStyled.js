@@ -67,11 +67,10 @@ export const HeaderWrapper = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray_lite};
   transition: box-shadow 0.3s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 1; // Always visible
-  transform: translateY(0); // Always at top
+  opacity: 1;
+  transform: translateY(0);
   box-shadow: ${({ $isSticky }) =>
     $isSticky ? "0 2px 16px rgba(0,0,0,0.08)" : "none"};
-  // Only animate shadow on scroll
   @media (max-width: 768px) {
     display: none;
   }
@@ -88,8 +87,8 @@ export const HeaderWrapperMob = styled.div`
   height: 56px;
   transition: box-shadow 0.3s, opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 1; // Always visible
-  transform: translateY(0); // Always at top
+  opacity: 1;
+  transform: translateY(0);
   box-shadow: ${({ $isSticky }) =>
     $isSticky ? "0 2px 16px rgba(0,0,0,0.08)" : "none"};
   @media (max-width: 768px) {

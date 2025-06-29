@@ -43,7 +43,6 @@ const Header = () => {
   const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Check if user is logged in
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const userData = localStorage.getItem("userData");
   let parsedUserData = null;
@@ -118,13 +117,11 @@ const Header = () => {
     navigate("/profile");
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setUserDropdownOpen(false);
       }
-      // Also check for any dropdown that might be open
       const userDropdowns = document.querySelectorAll("[data-user-dropdown]");
       let clickedOutside = true;
       userDropdowns.forEach((dropdown) => {

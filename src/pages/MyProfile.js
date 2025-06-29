@@ -559,7 +559,6 @@ const MyProfile = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [expandedOrders, setExpandedOrders] = useState({});
 
-  // US States list
   const US_STATES = [
     { value: "", label: "Select State" },
     { value: "AL", label: "Alabama" },
@@ -615,17 +614,14 @@ const MyProfile = () => {
   ];
 
   useEffect(() => {
-    // Scroll to top on page load
     window.scrollTo(0, 0);
 
-    // Check if user is logged in
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     if (!isLoggedIn) {
       navigate("/login");
       return;
     }
 
-    // Load user data
     const storedUserData = JSON.parse(localStorage.getItem("userData") || "{}");
     setUserData(storedUserData);
     setEditForm(storedUserData);
@@ -645,14 +641,12 @@ const MyProfile = () => {
   const validateForm = () => {
     const errors = {};
 
-    // Validate phone number (optional, but if provided should be valid)
     if (editForm.phone && editForm.phone.length > 0) {
       if (editForm.phone.length !== 10 || !/^\d{10}$/.test(editForm.phone)) {
         errors.phone = "Phone number must be 10 digits";
       }
     }
 
-    // Validate ZIP code (optional, but if provided should be valid)
     if (editForm.zipCode && editForm.zipCode.length > 0) {
       if (editForm.zipCode.length < 5 || !/^\d{5,6}$/.test(editForm.zipCode)) {
         errors.zipCode = "ZIP code must be 5-6 digits";
@@ -670,7 +664,6 @@ const MyProfile = () => {
       return;
     }
 
-    // Update user data in localStorage
     const allUsers = JSON.parse(localStorage.getItem("allUsers") || "{}");
     allUsers[userData.email] = editForm;
     localStorage.setItem("allUsers", JSON.stringify(allUsers));
@@ -684,12 +677,10 @@ const MyProfile = () => {
   const handleInputChange = (field, value) => {
     let processedValue = value;
 
-    // Handle phone number input (only allow digits, max 10)
     if (field === "phone") {
       processedValue = value.replace(/\D/g, "").substring(0, 10);
     }
 
-    // Handle ZIP code input (only allow digits, max 6)
     if (field === "zipCode") {
       processedValue = value.replace(/\D/g, "").substring(0, 6);
     }
@@ -699,7 +690,6 @@ const MyProfile = () => {
       [field]: processedValue,
     }));
 
-    // Clear validation error for this field when user starts typing
     if (validationErrors[field]) {
       setValidationErrors((prev) => ({
         ...prev,
@@ -712,7 +702,6 @@ const MyProfile = () => {
     try {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) {
-        // If the date is invalid, try to parse it as a localized string
         return dateString;
       }
 
@@ -761,7 +750,6 @@ const MyProfile = () => {
     <PageWrapper>
       <Container>
         <ProfileContainer>
-          {/* Sidebar */}
           <Sidebar>
             <UserProfile>
               <Avatar>
@@ -803,7 +791,6 @@ const MyProfile = () => {
             </LogoutButton>
           </Sidebar>
 
-          {/* Main Content */}
           <MainContent>
             {activeTab === "personal" && (
               <>

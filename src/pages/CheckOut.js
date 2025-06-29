@@ -91,9 +91,7 @@ const validateCardNumber = (cardNumber) => {
   return cleanCardNum === "2222222222222222";
 };
 
-// Helper function to clear data after successful order
 const clearOrderData = (isLoggedIn, currentFormData) => {
-  // Clear cart and order summary data
   localStorage.removeItem("cartItems");
   sessionStorage.removeItem("cartItems");
   localStorage.removeItem("subscriptionUpgraded");
@@ -101,23 +99,19 @@ const clearOrderData = (isLoggedIn, currentFormData) => {
   sessionStorage.removeItem("checkoutInProgress");
 
   if (isLoggedIn) {
-    // User is logged in - keep personal information but clear order-specific data
     const clearedFormData = {
       ...currentFormData,
-      // Clear payment and order-specific fields
       cardNumber: "",
       expiry: "",
       cvv: "",
       cardName: "",
       savePaymentInfo: false,
       promoCode: "",
-      // Reset shipping method to default
       shippingMethod: "standard",
     };
     localStorage.setItem("checkoutFormData", JSON.stringify(clearedFormData));
     return clearedFormData;
   } else {
-    // User is not logged in - clear all checkout form data
     localStorage.removeItem("checkoutFormData");
     return {
       firstName: "",
@@ -212,7 +206,6 @@ function CheckOut() {
   });
 
   useEffect(() => {
-    // Only run once on mount
     if (cartInitializedRef.current) {
       return;
     }
@@ -220,7 +213,6 @@ function CheckOut() {
     const getCartFromMultipleSources = () => {
       let cartData = null;
 
-      // First priority: navigation state
       const navigationState = location.state;
       if (
         navigationState &&
@@ -230,7 +222,6 @@ function CheckOut() {
         cartData = navigationState.cartItems;
       }
 
-      // Second priority: sessionStorage
       if (!cartData) {
         const sessionCart = sessionStorage.getItem("cartItems");
         if (sessionCart) {
@@ -249,7 +240,6 @@ function CheckOut() {
         }
       }
 
-      // Third priority: localStorage
       if (!cartData) {
         const localCart = localStorage.getItem("cartItems");
         if (localCart) {
@@ -295,7 +285,6 @@ function CheckOut() {
       }
     }
 
-    // Load saved form data only on first mount
     const savedFormData = localStorage.getItem("checkoutFormData");
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     const userData = localStorage.getItem("userData");
@@ -313,11 +302,9 @@ function CheckOut() {
     if (savedFormData) {
       try {
         const parsedFormData = JSON.parse(savedFormData);
-        // Merge saved form data with user data, giving priority to user data for personal fields
         const mergedFormData = { ...parsedFormData };
 
         if (parsedUserData) {
-          // Override personal fields with user data if available
           if (parsedUserData.email) mergedFormData.email = parsedUserData.email;
           if (parsedUserData.firstName)
             mergedFormData.firstName = parsedUserData.firstName;
@@ -342,7 +329,6 @@ function CheckOut() {
         console.error("Failed to parse form data from localStorage", error);
       }
     } else if (parsedUserData) {
-      // If user is logged in but no saved form data, pre-fill with user data
       setFormData((prev) => ({
         ...prev,
         email: parsedUserData.email || "",
@@ -370,7 +356,6 @@ function CheckOut() {
       });
     }
 
-    // Load subscription upgrade status
     const savedUpgradeStatus = localStorage.getItem("subscriptionUpgraded");
     const savedSavings = localStorage.getItem("subscriptionSavings");
     if (savedUpgradeStatus === "true" && savedSavings) {
@@ -378,10 +363,8 @@ function CheckOut() {
       setSubscriptionSavings(parseFloat(savedSavings));
     }
 
-    // Mark as initialized
     cartInitializedRef.current = true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Intentionally empty - we only want this to run once on mount
+  }, []);
 
   useEffect(() => {
     const calcSubtotal = cartItems.reduce(
@@ -429,7 +412,6 @@ function CheckOut() {
 
     let formDataToSave = { ...formData };
 
-    // If user is logged in, ensure user data is preserved in saved form data
     if (isLoggedIn && userData) {
       try {
         const parsedUserData = JSON.parse(userData);
@@ -478,7 +460,6 @@ function CheckOut() {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    // Handle logout reset form
     if (name === "resetForm" && type === "reset") {
       setFormData({
         firstName: "",
@@ -514,8 +495,6 @@ function CheckOut() {
         [name]: type === "checkbox" ? checked : value,
       };
 
-      // If sameShippingAddress is checked and we're updating shipping fields,
-      // also update the corresponding billing fields
       if (
         updated.sameShippingAddress &&
         [
@@ -540,7 +519,6 @@ function CheckOut() {
         updated[billingFieldName] = value;
       }
 
-      // If toggling sameShippingAddress to true, sync all billing fields
       if (name === "sameShippingAddress" && checked) {
         updated.billingFirstName = updated.firstName;
         updated.billingLastName = updated.lastName;
@@ -898,11 +876,9 @@ function CheckOut() {
       return;
     }
 
-    // Start order processing
     setIsProcessingOrder(true);
 
     try {
-      // Simulate order processing delay
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       const orderData = {
@@ -918,10 +894,8 @@ function CheckOut() {
       localStorage.setItem("orderData", JSON.stringify(orderData));
       localStorage.setItem("orderCompleted", "true");
 
-      // Check if user is logged in
       const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-      // Save order to user's order history if logged in
       if (isLoggedIn) {
         const userData = JSON.parse(localStorage.getItem("userData") || "{}");
         const allUsers = JSON.parse(localStorage.getItem("allUsers") || "{}");
@@ -944,13 +918,11 @@ function CheckOut() {
             },
           };
 
-          // Add order to user's order history
           if (!allUsers[userData.email].orders) {
             allUsers[userData.email].orders = [];
           }
           allUsers[userData.email].orders.unshift(newOrder); // Add to beginning
 
-          // Update user profile with latest information from checkout form
           allUsers[userData.email] = {
             ...allUsers[userData.email],
             firstName: formData.firstName,
@@ -964,7 +936,6 @@ function CheckOut() {
             phone: formData.phone,
           };
 
-          // Update localStorage
           localStorage.setItem("allUsers", JSON.stringify(allUsers));
           localStorage.setItem(
             "userData",
@@ -973,10 +944,8 @@ function CheckOut() {
         }
       }
 
-      // Clear order data and get updated form data
       const updatedFormData = clearOrderData(isLoggedIn, formData);
 
-      // Clear cart count
       localStorage.setItem("cartCount", "0");
       window.dispatchEvent(
         new CustomEvent("cartCountUpdate", {
@@ -984,7 +953,6 @@ function CheckOut() {
         })
       );
 
-      // Reset cart-related states
       setCartItems([]);
       setSubtotal(0);
       setShipping(0);
@@ -998,10 +966,8 @@ function CheckOut() {
       setSubscriptionSavings(0);
       setCvvMasked("");
 
-      // Reset form data based on login status
       setFormData(updatedFormData);
 
-      // Clear any validation errors
       setErrors({
         email: "",
         firstName: "",
@@ -1024,10 +990,8 @@ function CheckOut() {
       setCardNumberError("");
       setExpiryError("");
 
-      // Stop loading before navigation
       setIsProcessingOrder(false);
 
-      // Small delay to ensure state updates, then navigate
       setTimeout(() => {
         navigate("/thank-you");
       }, 100);
@@ -1038,7 +1002,6 @@ function CheckOut() {
   };
 
   useEffect(() => {
-    // Clear any existing timer first
     if (cvvTimerRef.current) {
       clearTimeout(cvvTimerRef.current);
       cvvTimerRef.current = null;
@@ -1063,7 +1026,6 @@ function CheckOut() {
     return () => {
       clearTimeout(timer);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.cvv]);
 
   const hasOneTimePurchaseProducts = cartItems.some(

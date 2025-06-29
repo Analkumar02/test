@@ -9,9 +9,6 @@ import {
   Select,
 } from "./FormComponents";
 
-/**
- * ShippingSection component handles the shipping address form fields
- */
 const ShippingSection = ({
   formData,
   errors,
@@ -19,7 +16,6 @@ const ShippingSection = ({
   setFocusedField,
   handleInputChange,
 }) => {
-  // Check if user is logged in
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const userData = localStorage.getItem("userData");
   let parsedUserData = null;

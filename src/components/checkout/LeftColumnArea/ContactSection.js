@@ -45,9 +45,6 @@ const LogoutLink = styled.a`
   }
 `;
 
-/**
- * ContactSection component handles the email input and login link
- */
 const ContactSection = ({
   formData,
   errors,
@@ -57,7 +54,6 @@ const ContactSection = ({
 }) => {
   const navigate = useNavigate();
 
-  // Check if user is logged in
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const userData = localStorage.getItem("userData");
   let parsedUserData = null;
@@ -74,9 +70,7 @@ const ContactSection = ({
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userData");
     localStorage.removeItem("checkoutFormData");
-    // Clear the form data by calling the parent's handler
     if (handleInputChange) {
-      // Reset form to initial state
       const resetEvent = {
         target: {
           name: "resetForm",

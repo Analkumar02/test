@@ -253,8 +253,6 @@ const BackToStore = styled(Link)`
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  // const imagePath = useImagePath();
-
   const [activeTab, setActiveTab] = useState("login");
   const [focusedField, setFocusedField] = useState(null);
 
