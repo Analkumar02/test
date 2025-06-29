@@ -25,22 +25,24 @@ export const updateCartWithDelay = async (
       setTimeout(resolve, Math.random() * 1000 + 1500)
     );
 
-    // Update localStorage and sessionStorage
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-    sessionStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    // Use per-user cart key if logged in
+    const cartKey = getCartKey();
+    localStorage.setItem(cartKey, JSON.stringify(updatedCartItems));
+    sessionStorage.setItem(cartKey, JSON.stringify(updatedCartItems));
 
-    // Calculate and update cart count
+    // Calculate and update cart count per user
     const newCartCount = updatedCartItems.reduce(
       (total, item) => total + item.quantity,
       0
     );
-    localStorage.setItem("cartCount", newCartCount.toString());
+    const countKey = cartKey.replace("cartItems", "cartCount");
+    localStorage.setItem(countKey, newCartCount.toString());
 
     // Dispatch custom events for comprehensive updates
     window.dispatchEvent(
       new CustomEvent("localStorageChange", {
         detail: {
-          key: "cartItems",
+          key: cartKey,
           newValue: JSON.stringify(updatedCartItems),
         },
       })
@@ -76,14 +78,15 @@ export const updateCartWithDelay = async (
  */
 export const getCartItems = () => {
   try {
+    const cartKey = getCartKey();
     // Try sessionStorage first
-    const sessionCart = sessionStorage.getItem("cartItems");
+    const sessionCart = sessionStorage.getItem(cartKey);
     if (sessionCart) {
       return JSON.parse(sessionCart);
     }
 
     // Fall back to localStorage
-    const localCart = localStorage.getItem("cartItems");
+    const localCart = localStorage.getItem(cartKey);
     if (localCart) {
       return JSON.parse(localCart);
     }
@@ -101,7 +104,9 @@ export const getCartItems = () => {
  */
 export const getCartCount = () => {
   try {
-    const count = localStorage.getItem("cartCount");
+    const cartKey = getCartKey();
+    const countKey = cartKey.replace("cartItems", "cartCount");
+    const count = localStorage.getItem(countKey);
     return count ? parseInt(count, 10) : 0;
   } catch (error) {
     console.error("Error getting cart count:", error);
@@ -179,3 +184,18 @@ export const createCartItem = (product, quantity = 1, options = {}) => {
     ...options,
   };
 };
+
+// Helper to get cart key for current user
+function getCartKey() {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  let userKey = null;
+  if (isLoggedIn) {
+    try {
+      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+      if (userData && userData.email) {
+        userKey = `cartItems_${userData.email}`;
+      }
+    } catch {}
+  }
+  return userKey || "cartItems";
+}

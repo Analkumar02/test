@@ -100,6 +100,29 @@ const Header = () => {
   const toggleUserDropdown = () => setUserDropdownOpen((prev) => !prev);
 
   const handleLogout = () => {
+    // Save user cart to user key if logged in
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    let userKey = null;
+    if (isLoggedIn) {
+      try {
+        const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+        if (userData && userData.email) {
+          userKey = `cartItems_${userData.email}`;
+          const guestCart = localStorage.getItem("cartItems");
+          if (guestCart) {
+            localStorage.setItem(userKey, guestCart);
+          }
+          // Also save cart count per user
+          const guestCartCount = localStorage.getItem("cartCount");
+          if (guestCartCount) {
+            localStorage.setItem(`cartCount_${userData.email}`, guestCartCount);
+          }
+        }
+      } catch {}
+    }
+    // Clear guest cart and count
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("cartCount");
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userData");
     localStorage.removeItem("checkoutFormData");

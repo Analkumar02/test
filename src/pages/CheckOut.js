@@ -137,6 +137,21 @@ const clearOrderData = (isLoggedIn, currentFormData) => {
   }
 };
 
+// Helper to get cart key for current user
+function getCartKey() {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  let userKey = null;
+  if (isLoggedIn) {
+    try {
+      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+      if (userData && userData.email) {
+        userKey = `cartItems_${userData.email}`;
+      }
+    } catch {}
+  }
+  return userKey || "cartItems";
+}
+
 function CheckOut() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -223,7 +238,7 @@ function CheckOut() {
       }
 
       if (!cartData) {
-        const sessionCart = sessionStorage.getItem("cartItems");
+        const sessionCart = sessionStorage.getItem(getCartKey());
         if (sessionCart) {
           try {
             const parsedSessionCart = JSON.parse(sessionCart);
@@ -241,7 +256,7 @@ function CheckOut() {
       }
 
       if (!cartData) {
-        const localCart = localStorage.getItem("cartItems");
+        const localCart = localStorage.getItem(getCartKey());
         if (localCart) {
           try {
             const parsedLocalCart = JSON.parse(localCart);
@@ -267,8 +282,8 @@ function CheckOut() {
       setCartItems(cartData);
 
       try {
-        localStorage.setItem("cartItems", JSON.stringify(cartData));
-        sessionStorage.setItem("cartItems", JSON.stringify(cartData));
+        localStorage.setItem(getCartKey(), JSON.stringify(cartData));
+        sessionStorage.setItem(getCartKey(), JSON.stringify(cartData));
       } catch (error) {
         console.error("Failed to save cart data to storage:", error);
       }
@@ -278,8 +293,8 @@ function CheckOut() {
       setCartItems([]);
 
       try {
-        localStorage.setItem("cartItems", JSON.stringify([]));
-        sessionStorage.setItem("cartItems", JSON.stringify([]));
+        localStorage.setItem(getCartKey(), JSON.stringify([]));
+        sessionStorage.setItem(getCartKey(), JSON.stringify([]));
       } catch (error) {
         console.error("Failed to save empty cart data to storage:", error);
       }
@@ -543,7 +558,7 @@ function CheckOut() {
     setIsCartUpdating(true);
     setLoadingMessage(productName ? `${message} ${productName}...` : message);
 
-    localStorage.setItem("cartItems", JSON.stringify(newItems));
+    localStorage.setItem(getCartKey(), JSON.stringify(newItems));
 
     const newCartCount = newItems.reduce(
       (total, item) => total + item.quantity,
