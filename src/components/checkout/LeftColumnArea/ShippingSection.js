@@ -19,6 +19,26 @@ const ShippingSection = ({
   setFocusedField,
   handleInputChange,
 }) => {
+  // Check if user is logged in
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const userData = localStorage.getItem("userData");
+  let parsedUserData = null;
+
+  if (isLoggedIn && userData) {
+    try {
+      parsedUserData = JSON.parse(userData);
+    } catch (error) {
+      console.error("Failed to parse user data:", error);
+    }
+  }
+
+  const hasUserName =
+    isLoggedIn &&
+    parsedUserData &&
+    (parsedUserData.firstName || parsedUserData.lastName);
+
+  const hasUserPhone = isLoggedIn && parsedUserData && parsedUserData.phone;
+
   return (
     <FormSection>
       <SectionTitle>Shipping</SectionTitle>
@@ -76,6 +96,7 @@ const ShippingSection = ({
             style={{
               border: errors.firstName ? "1.5px solid #e53935" : undefined,
             }}
+            disabled={hasUserName}
             required
           />
           {errors.firstName && (
@@ -87,6 +108,17 @@ const ShippingSection = ({
               }}
             >
               {errors.firstName}
+            </div>
+          )}
+          {hasUserName && (
+            <div
+              style={{
+                color: "#60983E",
+                fontSize: "0.85rem",
+                marginTop: 2,
+              }}
+            >
+              Using your registered name
             </div>
           )}
         </InputWrapper>
@@ -115,6 +147,7 @@ const ShippingSection = ({
             style={{
               border: errors.lastName ? "1.5px solid #e53935" : undefined,
             }}
+            disabled={hasUserName}
             required
           />
           {errors.lastName && (
@@ -407,6 +440,7 @@ const ShippingSection = ({
           style={{
             border: errors.phone ? "1.5px solid #e53935" : undefined,
           }}
+          disabled={hasUserPhone}
           required
         />
         {errors.phone && (
@@ -418,6 +452,17 @@ const ShippingSection = ({
             }}
           >
             {errors.phone}
+          </div>
+        )}
+        {hasUserPhone && (
+          <div
+            style={{
+              color: "#60983E",
+              fontSize: "0.85rem",
+              marginTop: 2,
+            }}
+          >
+            Using your registered phone number
           </div>
         )}
       </InputWrapper>

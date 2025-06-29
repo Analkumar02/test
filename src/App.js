@@ -1,7 +1,7 @@
 import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
 import GlobalStyle from "./styles/globalStyles";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/footer";
 
@@ -11,6 +11,7 @@ import Product from "./pages/Product";
 import CheckOut from "./pages/CheckOut";
 import ThankYou from "./pages/ThankYou";
 import Login from "./pages/Login";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/checkout" element={<CheckOut />} />
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<MyProfile />} />
             <Route path="*" element={<Home />} />
           </Routes>
           <Footer />

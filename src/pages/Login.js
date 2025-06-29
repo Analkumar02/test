@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../components/Container";
-import { useImagePath } from "../context/ImagePathContext";
 import { Icon } from "@iconify/react";
 
 const PageWrapper = styled.div`
@@ -59,10 +58,6 @@ const FormTitle = styled.h2`
   color: #333;
   margin-bottom: 1.5rem;
   text-align: center;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 1.25rem;
 `;
 
 const InputWrapper = styled.div`
@@ -257,7 +252,8 @@ const BackToStore = styled(Link)`
 
 function Login() {
   const navigate = useNavigate();
-  const imagePath = useImagePath();
+  const location = useLocation();
+  // const imagePath = useImagePath();
 
   const [activeTab, setActiveTab] = useState("login");
   const [focusedField, setFocusedField] = useState(null);
@@ -293,33 +289,73 @@ function Login() {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({
-        email: loginForm.email,
-        name: "John Doe",
-      })
-    );
-    navigate("/checkout");
+
+    // Check if user exists with this email
+    const allUsers = JSON.parse(localStorage.getItem("allUsers") || "{}");
+    const user = allUsers[loginForm.email];
+
+    if (user) {
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userData", JSON.stringify(user));
+      // Redirect to current page or checkout
+      const previousPath = location.state?.from?.pathname || "/";
+      navigate(previousPath === "/login" ? "/" : previousPath);
+    } else {
+      alert("User not found. Please sign up first.");
+    }
   };
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
+
+    // Validate password length
+    if (signupForm.password.length < 6) {
+      alert("Password must be at least 6 characters long");
+      return;
+    }
+
     if (signupForm.password !== signupForm.confirmPassword) {
       alert("Passwords don't match");
       return;
     }
 
+    // Check if user already exists with this email
+    const allUsers = JSON.parse(localStorage.getItem("allUsers") || "{}");
+
+    if (allUsers[signupForm.email]) {
+      alert("User with this email already exists. Please login instead.");
+      return;
+    }
+
+    // Generate unique user ID
+    const userId =
+      "user_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+
+    const newUser = {
+      userId,
+      email: signupForm.email,
+      firstName: signupForm.firstName,
+      lastName: signupForm.lastName,
+      address: "",
+      apartment: "",
+      city: "",
+      state: "",
+      country: "",
+      zipCode: "",
+      orders: [],
+    };
+
+    // Save user to all users list (using email as key for easy lookup)
+    allUsers[signupForm.email] = newUser;
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+
+    // Login the user
     localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({
-        email: signupForm.email,
-        name: `${signupForm.firstName} ${signupForm.lastName}`,
-      })
-    );
-    navigate("/checkout");
+    localStorage.setItem("userData", JSON.stringify(newUser));
+
+    // Redirect to current page or home
+    const previousPath = location.state?.from?.pathname || "/";
+    navigate(previousPath === "/login" ? "/" : previousPath);
   };
 
   return (

@@ -1,5 +1,5 @@
-﻿import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+﻿import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Container from "./Container";
 import SidebarCart from "./SidebarCart";
 import SearchBar from "./SearchBar";
@@ -24,16 +24,37 @@ import {
   Icons,
   CartIconWrapper,
   CartCountBadge,
+  UserIconWrapper,
+  UserDropdown,
+  UserDropdownItem,
+  UserDropdownDivider,
+  UserWelcomeText,
 } from "./HeaderStyled";
 
 const Header = () => {
   const imagePath = useImagePath();
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [cartCount, setCartCount] = useState(0);
   const [isCartVisible, setCartVisible] = useState(false);
   const [isSearchOpen, setSearchOpen] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Check if user is logged in
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const userData = localStorage.getItem("userData");
+  let parsedUserData = null;
+
+  if (isLoggedIn && userData) {
+    try {
+      parsedUserData = JSON.parse(userData);
+    } catch (error) {
+      console.error("Failed to parse user data:", error);
+    }
+  }
 
   useEffect(() => {
     const storedCount = localStorage.getItem("cartCount");
@@ -77,6 +98,51 @@ const Header = () => {
 
   const toggleCart = () => setCartVisible((prev) => !prev);
 
+  const toggleUserDropdown = () => setUserDropdownOpen((prev) => !prev);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("checkoutFormData");
+    setUserDropdownOpen(false);
+    window.location.reload();
+  };
+
+  const handleLogin = () => {
+    setUserDropdownOpen(false);
+    navigate("/login");
+  };
+
+  const handleProfileClick = () => {
+    setUserDropdownOpen(false);
+    navigate("/profile");
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setUserDropdownOpen(false);
+      }
+      // Also check for any dropdown that might be open
+      const userDropdowns = document.querySelectorAll("[data-user-dropdown]");
+      let clickedOutside = true;
+      userDropdowns.forEach((dropdown) => {
+        if (dropdown.contains(event.target)) {
+          clickedOutside = false;
+        }
+      });
+      if (clickedOutside) {
+        setUserDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <Topbar>
@@ -118,12 +184,44 @@ const Header = () => {
                 style={{ color: "#1d3e57", cursor: "pointer" }}
                 onClick={() => setSearchOpen(true)}
               />
-              <Icon
-                icon="lucide:circle-user-round"
-                width="24"
-                height="24"
-                style={{ color: "#1d3e57" }}
-              />
+              <UserIconWrapper ref={dropdownRef} data-user-dropdown>
+                <Icon
+                  icon="lucide:circle-user-round"
+                  width="24"
+                  height="24"
+                  style={{ color: "#1d3e57", cursor: "pointer" }}
+                  onClick={toggleUserDropdown}
+                />
+                <UserDropdown $isOpen={isUserDropdownOpen}>
+                  {isLoggedIn && parsedUserData ? (
+                    <>
+                      <UserWelcomeText>
+                        Welcome, {parsedUserData.firstName || "User"}!
+                      </UserWelcomeText>
+                      <UserDropdownItem onClick={handleProfileClick}>
+                        <Icon icon="lucide:user" width="16" height="16" />
+                        My Profile
+                      </UserDropdownItem>
+                      <UserDropdownDivider />
+                      <UserDropdownItem onClick={handleLogout}>
+                        <Icon icon="lucide:log-out" width="16" height="16" />
+                        Sign Out
+                      </UserDropdownItem>
+                    </>
+                  ) : (
+                    <>
+                      <UserDropdownItem onClick={handleLogin}>
+                        <Icon icon="lucide:log-in" width="16" height="16" />
+                        Login
+                      </UserDropdownItem>
+                      <UserDropdownItem onClick={handleLogin}>
+                        <Icon icon="lucide:user-plus" width="16" height="16" />
+                        Sign Up
+                      </UserDropdownItem>
+                    </>
+                  )}
+                </UserDropdown>
+              </UserIconWrapper>
               <CartIconWrapper
                 onClick={toggleCart}
                 style={{ cursor: "pointer" }}
@@ -177,12 +275,44 @@ const Header = () => {
                 style={{ color: "#1d3e57", cursor: "pointer" }}
                 onClick={() => setSearchOpen(true)}
               />
-              <Icon
-                icon="lucide:circle-user-round"
-                width="24"
-                height="24"
-                style={{ color: "#1d3e57" }}
-              />
+              <UserIconWrapper data-user-dropdown>
+                <Icon
+                  icon="lucide:circle-user-round"
+                  width="24"
+                  height="24"
+                  style={{ color: "#1d3e57", cursor: "pointer" }}
+                  onClick={toggleUserDropdown}
+                />
+                <UserDropdown $isOpen={isUserDropdownOpen}>
+                  {isLoggedIn && parsedUserData ? (
+                    <>
+                      <UserWelcomeText>
+                        Welcome, {parsedUserData.firstName || "User"}!
+                      </UserWelcomeText>
+                      <UserDropdownItem onClick={handleProfileClick}>
+                        <Icon icon="lucide:user" width="16" height="16" />
+                        My Profile
+                      </UserDropdownItem>
+                      <UserDropdownDivider />
+                      <UserDropdownItem onClick={handleLogout}>
+                        <Icon icon="lucide:log-out" width="16" height="16" />
+                        Sign Out
+                      </UserDropdownItem>
+                    </>
+                  ) : (
+                    <>
+                      <UserDropdownItem onClick={handleLogin}>
+                        <Icon icon="lucide:log-in" width="16" height="16" />
+                        Login
+                      </UserDropdownItem>
+                      <UserDropdownItem onClick={handleLogin}>
+                        <Icon icon="lucide:user-plus" width="16" height="16" />
+                        Sign Up
+                      </UserDropdownItem>
+                    </>
+                  )}
+                </UserDropdown>
+              </UserIconWrapper>
               <CartIconWrapperMob
                 onClick={toggleCart}
                 style={{ cursor: "pointer" }}

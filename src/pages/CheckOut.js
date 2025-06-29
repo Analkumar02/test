@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../components/Container";
 import { useImagePath } from "../context/ImagePathContext";
@@ -145,6 +145,7 @@ const clearOrderData = (isLoggedIn, currentFormData) => {
 
 function CheckOut() {
   const location = useLocation();
+  const navigate = useNavigate();
   const imagePath = useImagePath();
 
   const [formData, setFormData] = useState({
@@ -220,7 +221,7 @@ function CheckOut() {
       let cartData = null;
 
       // First priority: navigation state
-      const navigationState = window.location.hash ? location.state : null;
+      const navigationState = location.state;
       if (
         navigationState &&
         navigationState.cartItems &&
@@ -299,27 +300,74 @@ function CheckOut() {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     const userData = localStorage.getItem("userData");
 
-    if (savedFormData) {
+    let parsedUserData = null;
+    if (isLoggedIn && userData) {
       try {
-        const parsedFormData = JSON.parse(savedFormData);
-        setFormData((prev) => ({ ...prev, ...parsedFormData }));
-      } catch (error) {
-        console.error("Failed to parse form data from localStorage", error);
-      }
-    } else if (isLoggedIn && userData) {
-      // If user is logged in but no saved form data, pre-fill with user data
-      try {
-        const parsedUserData = JSON.parse(userData);
-        if (parsedUserData.email) {
-          setFormData((prev) => ({
-            ...prev,
-            email: parsedUserData.email,
-            // You can add more pre-filled fields here if userData contains them
-          }));
-        }
+        parsedUserData = JSON.parse(userData);
+        console.log("Parsed user data:", parsedUserData);
       } catch (error) {
         console.error("Failed to parse user data from localStorage", error);
       }
+    }
+
+    if (savedFormData) {
+      try {
+        const parsedFormData = JSON.parse(savedFormData);
+        // Merge saved form data with user data, giving priority to user data for personal fields
+        const mergedFormData = { ...parsedFormData };
+
+        if (parsedUserData) {
+          // Override personal fields with user data if available
+          if (parsedUserData.email) mergedFormData.email = parsedUserData.email;
+          if (parsedUserData.firstName)
+            mergedFormData.firstName = parsedUserData.firstName;
+          if (parsedUserData.lastName)
+            mergedFormData.lastName = parsedUserData.lastName;
+          if (parsedUserData.phone) mergedFormData.phone = parsedUserData.phone;
+          if (parsedUserData.address)
+            mergedFormData.address1 = parsedUserData.address;
+          if (parsedUserData.apartment)
+            mergedFormData.address2 = parsedUserData.apartment;
+          if (parsedUserData.city) mergedFormData.city = parsedUserData.city;
+          if (parsedUserData.state) mergedFormData.state = parsedUserData.state;
+          if (parsedUserData.country)
+            mergedFormData.country = parsedUserData.country;
+          if (parsedUserData.zipCode)
+            mergedFormData.zipCode = parsedUserData.zipCode;
+        }
+
+        setFormData((prev) => ({ ...prev, ...mergedFormData }));
+        console.log("Merged form data:", mergedFormData);
+      } catch (error) {
+        console.error("Failed to parse form data from localStorage", error);
+      }
+    } else if (parsedUserData) {
+      // If user is logged in but no saved form data, pre-fill with user data
+      setFormData((prev) => ({
+        ...prev,
+        email: parsedUserData.email || "",
+        firstName: parsedUserData.firstName || "",
+        lastName: parsedUserData.lastName || "",
+        phone: parsedUserData.phone || "",
+        address1: parsedUserData.address || "",
+        address2: parsedUserData.apartment || "",
+        city: parsedUserData.city || "",
+        state: parsedUserData.state || "",
+        country: parsedUserData.country || "United States",
+        zipCode: parsedUserData.zipCode || "",
+      }));
+      console.log("Set form data from user data:", {
+        email: parsedUserData.email || "",
+        firstName: parsedUserData.firstName || "",
+        lastName: parsedUserData.lastName || "",
+        phone: parsedUserData.phone || "",
+        address1: parsedUserData.address || "",
+        address2: parsedUserData.apartment || "",
+        city: parsedUserData.city || "",
+        state: parsedUserData.state || "",
+        country: parsedUserData.country || "United States",
+        zipCode: parsedUserData.zipCode || "",
+      });
     }
 
     // Load subscription upgrade status
@@ -376,7 +424,37 @@ function CheckOut() {
   }, [cartItems, couponApplied, formData.shippingMethod]);
 
   useEffect(() => {
-    localStorage.setItem("checkoutFormData", JSON.stringify(formData));
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const userData = localStorage.getItem("userData");
+
+    let formDataToSave = { ...formData };
+
+    // If user is logged in, ensure user data is preserved in saved form data
+    if (isLoggedIn && userData) {
+      try {
+        const parsedUserData = JSON.parse(userData);
+        if (parsedUserData.email) formDataToSave.email = parsedUserData.email;
+        if (parsedUserData.firstName)
+          formDataToSave.firstName = parsedUserData.firstName;
+        if (parsedUserData.lastName)
+          formDataToSave.lastName = parsedUserData.lastName;
+        if (parsedUserData.phone) formDataToSave.phone = parsedUserData.phone;
+        if (parsedUserData.address)
+          formDataToSave.address1 = parsedUserData.address;
+        if (parsedUserData.apartment)
+          formDataToSave.address2 = parsedUserData.apartment;
+        if (parsedUserData.city) formDataToSave.city = parsedUserData.city;
+        if (parsedUserData.state) formDataToSave.state = parsedUserData.state;
+        if (parsedUserData.country)
+          formDataToSave.country = parsedUserData.country;
+        if (parsedUserData.zipCode)
+          formDataToSave.zipCode = parsedUserData.zipCode;
+      } catch (error) {
+        console.error("Failed to parse user data when saving form:", error);
+      }
+    }
+
+    localStorage.setItem("checkoutFormData", JSON.stringify(formDataToSave));
   }, [formData]);
 
   const handleShippingChange = (e) => {
@@ -399,6 +477,32 @@ function CheckOut() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    // Handle logout reset form
+    if (name === "resetForm" && type === "reset") {
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        country: "United States",
+        sameShippingAddress: true,
+        shippingMethod: "standard",
+        paymentMethod: "creditCard",
+        cardName: "",
+        cardNumber: "",
+        expiry: "",
+        cvv: "",
+        savePaymentInfo: false,
+        promoCode: "",
+      });
+      return;
+    }
 
     if (name === "promoCode" && couponError) {
       setCouponError("");
@@ -817,6 +921,58 @@ function CheckOut() {
       // Check if user is logged in
       const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
+      // Save order to user's order history if logged in
+      if (isLoggedIn) {
+        const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+        const allUsers = JSON.parse(localStorage.getItem("allUsers") || "{}");
+
+        if (userData.email && allUsers[userData.email]) {
+          const newOrder = {
+            id: `ORDER-${Date.now()}`,
+            date: new Date().toLocaleDateString(),
+            total: total.toFixed(2),
+            items: cartItems,
+            shippingMethod: getShippingMethodName(formData.shippingMethod),
+            shippingAddress: {
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              address1: formData.address1,
+              city: formData.city,
+              state: formData.state,
+              zipCode: formData.zipCode,
+              phone: formData.phone,
+            },
+          };
+
+          // Add order to user's order history
+          if (!allUsers[userData.email].orders) {
+            allUsers[userData.email].orders = [];
+          }
+          allUsers[userData.email].orders.unshift(newOrder); // Add to beginning
+
+          // Update user profile with latest information from checkout form
+          allUsers[userData.email] = {
+            ...allUsers[userData.email],
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            address: formData.address1,
+            apartment: formData.address2,
+            city: formData.city,
+            state: formData.state,
+            country: formData.country,
+            zipCode: formData.zipCode,
+            phone: formData.phone,
+          };
+
+          // Update localStorage
+          localStorage.setItem("allUsers", JSON.stringify(allUsers));
+          localStorage.setItem(
+            "userData",
+            JSON.stringify(allUsers[userData.email])
+          );
+        }
+      }
+
       // Clear order data and get updated form data
       const updatedFormData = clearOrderData(isLoggedIn, formData);
 
@@ -873,7 +1029,7 @@ function CheckOut() {
 
       // Small delay to ensure state updates, then navigate
       setTimeout(() => {
-        window.location.hash = "/thank-you";
+        navigate("/thank-you");
       }, 100);
     } catch (error) {
       console.error("Order processing error:", error);

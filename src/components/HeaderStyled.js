@@ -868,3 +868,70 @@ export const WhiteButton = styled.button`
     border-radius: 5px;
   }
 `;
+
+// User Dropdown Styles
+export const UserIconWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const UserDropdown = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: #fff;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 1000;
+  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
+  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+  transform: translateY(${(props) => (props.$isOpen ? "0" : "-10px")});
+  transition: all 0.2s ease;
+`;
+
+export const UserDropdownItem = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  &:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 8px 8px;
+  }
+
+  &:only-child {
+    border-radius: 8px;
+  }
+`;
+
+export const UserDropdownDivider = styled.div`
+  height: 1px;
+  background-color: #e1e1e1;
+  margin: 0.25rem 0;
+`;
+
+export const UserWelcomeText = styled.div`
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: #666;
+  border-bottom: 1px solid #e1e1e1;
+`;
