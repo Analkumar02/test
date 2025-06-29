@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useImagePath } from "../../context/ImagePathContext";
+import { useImagePath } from "../../../context/ImagePathContext";
 
 const ExpressCheckoutSection = styled.div`
   margin-bottom: 1.5rem;
