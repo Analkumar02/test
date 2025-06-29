@@ -113,7 +113,7 @@ const ShippingMethodSection = ({
             name="shippingMethod"
             value="nextDay"
             checked={formData.shippingMethod === "nextDay"}
-            disabled={false}
+            onChange={handleShippingChange}
             style={{ display: "none" }}
           />
           <CustomRadio selected={formData.shippingMethod === "nextDay"} />

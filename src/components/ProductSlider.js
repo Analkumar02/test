@@ -6,11 +6,9 @@ import Container from "./Container";
 import products from "../data/product.json";
 import { useImagePath } from "../context/ImagePathContext";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 
-// Styled Components
 const ProductArea = styled.div`
   padding: 80px 0;
 
@@ -153,7 +151,7 @@ const ProductSlide = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.8);
 
   @media (max-width: 768px) {
-    max-width: 100%; // Remove fixed 300px constraint
+    max-width: 100%;
     padding: 15px;
     margin: 0 auto;
   }
@@ -389,7 +387,6 @@ const ProductSlider = ({ hideTitle = false }) => {
               <SwiperSlide key={product.id}>
                 <ProductSlide>
                   <div className="image-container">
-                    {/* Main product image */}
                     <img
                       className="product-image"
                       src={`${imagePath}${product.slideshowImages[0]}`}
@@ -410,7 +407,6 @@ const ProductSlider = ({ hideTitle = false }) => {
                       alt={product.productName}
                     />
 
-                    {/* Hover image (second image from slideshow) */}
                     {product.slideshowImages.length > 3 && (
                       <img
                         className="product-image-hover"

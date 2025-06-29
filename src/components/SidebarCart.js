@@ -1036,23 +1036,15 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
       return;
     }
 
-    console.log("Checkout initiated with cart items:", cartItems);
-
     // Ensure cart items are saved to both localStorage and sessionStorage before navigation
     try {
       const cartData = JSON.stringify(cartItems);
-      // Save to both localStorage and sessionStorage
       localStorage.setItem("cartItems", cartData);
       sessionStorage.setItem("cartItems", cartData);
       sessionStorage.setItem("checkoutInProgress", "true");
 
-      // Navigate with state as primary method
+      // Navigate with state
       navigate("/checkout", { state: { cartItems, fromCart: true } });
-
-      // Backup navigation attempt
-      setTimeout(() => {
-        navigate("/checkout", { state: cartState, replace: true });
-      }, 50);
     } catch (error) {
       console.error("Error saving cart to storage:", error);
       alert("There was an error saving your cart. Please try again.");
@@ -1063,19 +1055,6 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
     if (onClose) {
       onClose();
     }
-
-    // Use navigate with state as backup
-    const cartState = { cartItems, fromCart: true };
-
-    // Navigate immediately with state, and also try with a delay
-    console.log("Navigating to checkout page with state...");
-    navigate("/checkout", { state: cartState });
-
-    // Also try with a slight delay as backup
-    setTimeout(() => {
-      console.log("Backup navigation attempt...");
-      navigate("/checkout", { state: cartState, replace: true });
-    }, 50);
   };
 
   const handleAddSuggestedProduct = async (productId) => {

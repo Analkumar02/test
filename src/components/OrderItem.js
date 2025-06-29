@@ -122,9 +122,8 @@ const DiscountedPrice = styled.span`
 `;
 
 const OrderItemComponent = ({ item, imagePath, onRemove, couponApplied }) => {
-  // Check if item is undefined or null and provide default values
   if (!item) {
-    return null; // Don't render anything if item is not provided
+    return null;
   }
 
   const handleRemoveClick = () => {
@@ -133,16 +132,12 @@ const OrderItemComponent = ({ item, imagePath, onRemove, couponApplied }) => {
     }
   };
 
-  // Calculate if this item has a coupon discount applied
-  // Only one-time purchases get the discount, not subscriptions or demo products
   const hasDiscount =
     couponApplied && !item.isSubscription && !item.isDemoProduct;
 
-  // Calculate the price after discount
   const price = hasDiscount ? item.price * 0.9 : item.price;
   const totalPrice = price * (item.quantity || 1);
 
-  // Use default thumbnail if not provided
   const thumbnailSrc = item.thumbnail || "product-default.png";
 
   return (

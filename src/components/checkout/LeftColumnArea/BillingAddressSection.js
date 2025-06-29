@@ -41,9 +41,6 @@ const BillingFormWrapper = styled.div`
   }
 `;
 
-/**
- * BillingAddressSection component handles the billing address form fields
- */
 const BillingAddressSection = ({
   formData,
   errors,
@@ -52,15 +49,11 @@ const BillingAddressSection = ({
   handleInputChange,
   setFormData,
 }) => {
-  // Use the same styled components as the shipping options
   const BillingAddressGroup = OptionGroup;
   const BillingOption = Option;
   const BillingCustomRadio = CustomRadio;
 
-  // Add a specific handler for the billing address option changes
   const handleBillingAddressOptionChange = (useSameAddress) => {
-    // Clear billing form data when switching to "different address" option
-    // This prevents the shipping data from being retained
     if (!useSameAddress) {
       setFormData((prev) => ({
         ...prev,
@@ -79,7 +72,6 @@ const BillingAddressSection = ({
       setFormData((prev) => ({
         ...prev,
         sameShippingAddress: true,
-        // Copy shipping address to billing fields
         billingFirstName: prev.firstName,
         billingLastName: prev.lastName,
         billingAddress1: prev.address1,
@@ -103,7 +95,6 @@ const BillingAddressSection = ({
           overflow: "visible",
         }}
       >
-        {" "}
         <BillingOption
           selected={formData.sameShippingAddress}
           onClick={() => handleBillingAddressOptionChange(true)}
@@ -192,7 +183,6 @@ const BillingAddressSection = ({
         </BillingOption>
       </BillingAddressGroup>
 
-      {/* Only show billing address form when using a different address */}
       {!formData.sameShippingAddress && (
         <BillingFormWrapper>
           <InputWrapper>
@@ -391,7 +381,7 @@ const BillingAddressSection = ({
             />
           </InputWrapper>
 
-          <FormRow columns="1.5fr 1fr 1fr">
+          <FormRow $columns="1.5fr 1fr 1fr">
             <InputWrapper className={errors.billingCity ? "error-field" : ""}>
               <InputLabel
                 htmlFor="billingCity"

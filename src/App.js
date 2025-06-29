@@ -31,6 +31,7 @@ function App() {
             <Route path="/checkout" element={<CheckOut />} />
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Home />} />
           </Routes>
           <Footer />
         </Router>

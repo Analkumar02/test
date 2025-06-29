@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Container from "./Container";
 import { Icon } from "@iconify/react";
 
-// Styled Components
 const TableSection = styled.div`
   padding: 80px 0;
 
@@ -43,7 +42,6 @@ const TableWrapper = styled.div`
   background: white;
   position: relative;
 
-  /* Fix for sticky columns */
   &::-webkit-scrollbar {
     height: 8px;
   }
@@ -108,7 +106,6 @@ const TableHeadCell = styled.th`
       max-width: 160px;
     }
 
-    /* Force the sticky behavior */
     transform: translateX(0);
   }
 
@@ -192,7 +189,6 @@ const TableCell = styled.td`
     background: ${({ theme }) => theme.colors.white};
     box-shadow: 2px 0 6px rgba(0, 0, 0, 0.04);
 
-    /* Force the sticky behavior */
     transform: translateX(0);
   }
 
@@ -227,7 +223,6 @@ const ProductName = styled.div`
 `;
 
 const ComparisonTable = () => {
-  // Product color codes
   const productColors = {
     sugarShift: "#006DA6",
     antibioticAntidote: "#DEB700",

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../components/Container";
 import { useImagePath } from "../context/ImagePathContext";
@@ -61,13 +61,11 @@ const validateEmail = (email) => {
 };
 
 const validateZipCode = (zipCode) => {
-  // Ensure zipCode is exactly 5 or 6 digits
   const re = /^\d{5,6}$/;
   return re.test(String(zipCode));
 };
 
 const validatePhone = (phone) => {
-  // Ensure phone is exactly 10 digits
   const re = /^\d{10}$/;
   return re.test(String(phone));
 };
@@ -93,8 +91,59 @@ const validateCardNumber = (cardNumber) => {
   return cleanCardNum === "2222222222222222";
 };
 
+// Helper function to clear data after successful order
+const clearOrderData = (isLoggedIn, currentFormData) => {
+  // Clear cart and order summary data
+  localStorage.removeItem("cartItems");
+  sessionStorage.removeItem("cartItems");
+  localStorage.removeItem("subscriptionUpgraded");
+  localStorage.removeItem("subscriptionSavings");
+  sessionStorage.removeItem("checkoutInProgress");
+
+  if (isLoggedIn) {
+    // User is logged in - keep personal information but clear order-specific data
+    const clearedFormData = {
+      ...currentFormData,
+      // Clear payment and order-specific fields
+      cardNumber: "",
+      expiry: "",
+      cvv: "",
+      cardName: "",
+      savePaymentInfo: false,
+      promoCode: "",
+      // Reset shipping method to default
+      shippingMethod: "standard",
+    };
+    localStorage.setItem("checkoutFormData", JSON.stringify(clearedFormData));
+    return clearedFormData;
+  } else {
+    // User is not logged in - clear all checkout form data
+    localStorage.removeItem("checkoutFormData");
+    return {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "United States",
+      sameShippingAddress: true,
+      shippingMethod: "standard",
+      paymentMethod: "creditCard",
+      cardName: "",
+      cardNumber: "",
+      expiry: "",
+      cvv: "",
+      savePaymentInfo: false,
+      promoCode: "",
+    };
+  }
+};
+
 function CheckOut() {
-  const navigate = useNavigate();
   const location = useLocation();
   const imagePath = useImagePath();
 
@@ -114,7 +163,7 @@ function CheckOut() {
     paymentMethod: "creditCard",
     cardName: "",
     cardNumber: "",
-    expiry: "", // Added missing expiry field
+    expiry: "",
     cvv: "",
     savePaymentInfo: false,
     promoCode: "",
@@ -127,7 +176,8 @@ function CheckOut() {
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
   const [cvvMasked, setCvvMasked] = useState("");
-  const [cvvTimer, setCvvTimer] = useState(null);
+  const cvvTimerRef = useRef(null);
+  const cartInitializedRef = useRef(false);
   const [cardNumberError, setCardNumberError] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponDiscount, setCouponDiscount] = useState(0);
@@ -139,6 +189,7 @@ function CheckOut() {
   const [subscriptionSavings, setSubscriptionSavings] = useState(0);
   const [isCartUpdating, setIsCartUpdating] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
+  const [isProcessingOrder, setIsProcessingOrder] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     firstName: "",
@@ -160,26 +211,25 @@ function CheckOut() {
   });
 
   useEffect(() => {
-    console.log("CheckOut component useEffect triggered");
+    // Only run once on mount
+    if (cartInitializedRef.current) {
+      return;
+    }
 
-    // Get cart data from multiple sources
     const getCartFromMultipleSources = () => {
       let cartData = null;
 
-      // First, try to get from navigation state (most reliable for direct navigation)
+      // First priority: navigation state
+      const navigationState = window.location.hash ? location.state : null;
       if (
-        location.state &&
-        location.state.cartItems &&
-        location.state.fromCart
+        navigationState &&
+        navigationState.cartItems &&
+        navigationState.fromCart
       ) {
-        console.log(
-          "Found cart data in navigation state:",
-          location.state.cartItems
-        );
-        cartData = location.state.cartItems;
+        cartData = navigationState.cartItems;
       }
 
-      // If not found, try sessionStorage (backup for React StrictMode issues)
+      // Second priority: sessionStorage
       if (!cartData) {
         const sessionCart = sessionStorage.getItem("cartItems");
         if (sessionCart) {
@@ -190,10 +240,6 @@ function CheckOut() {
               Array.isArray(parsedSessionCart) &&
               parsedSessionCart.length > 0
             ) {
-              console.log(
-                "Found cart data in sessionStorage:",
-                parsedSessionCart
-              );
               cartData = parsedSessionCart;
             }
           } catch (error) {
@@ -202,7 +248,7 @@ function CheckOut() {
         }
       }
 
-      // Finally, try localStorage
+      // Third priority: localStorage
       if (!cartData) {
         const localCart = localStorage.getItem("cartItems");
         if (localCart) {
@@ -213,7 +259,6 @@ function CheckOut() {
               Array.isArray(parsedLocalCart) &&
               parsedLocalCart.length > 0
             ) {
-              console.log("Found cart data in localStorage:", parsedLocalCart);
               cartData = parsedLocalCart;
             }
           } catch (error) {
@@ -225,53 +270,35 @@ function CheckOut() {
       return cartData;
     };
 
-    const processCartData = () => {
-      const cartData = getCartFromMultipleSources();
+    const cartData = getCartFromMultipleSources();
 
-      if (cartData && cartData.length > 0) {
-        console.log("Valid cart found, setting cart items:", cartData);
-        setCartItems(cartData);
+    if (cartData && cartData.length > 0) {
+      setCartItems(cartData);
 
-        // Ensure data is saved to both storages for consistency
-        try {
-          localStorage.setItem("cartItems", JSON.stringify(cartData));
-          sessionStorage.setItem("cartItems", JSON.stringify(cartData));
-        } catch (error) {
-          console.error("Failed to save cart data to storage:", error);
-        }
-
-        // Clear checkout progress flag
-        sessionStorage.removeItem("checkoutInProgress");
-      } else {
-        console.log("No valid cart data found, showing empty cart state");
-        // Set cart items to empty array instead of redirecting
-        setCartItems([]);
-
-        // Initialize empty cart in storage
-        try {
-          localStorage.setItem("cartItems", JSON.stringify([]));
-          sessionStorage.setItem("cartItems", JSON.stringify([]));
-        } catch (error) {
-          console.error("Failed to save empty cart data to storage:", error);
-        }
+      try {
+        localStorage.setItem("cartItems", JSON.stringify(cartData));
+        sessionStorage.setItem("cartItems", JSON.stringify(cartData));
+      } catch (error) {
+        console.error("Failed to save cart data to storage:", error);
       }
-    };
 
-    // Process immediately
-    processCartData();
+      sessionStorage.removeItem("checkoutInProgress");
+    } else {
+      setCartItems([]);
 
-    // Also check after a brief delay in case of timing issues
-    const timeoutId = setTimeout(() => {
-      const currentCartItems = getCartFromMultipleSources();
-      if (!currentCartItems || currentCartItems.length === 0) {
-        console.log(
-          "Secondary check: cart is still empty, showing empty state"
-        );
-        setCartItems([]);
+      try {
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        sessionStorage.setItem("cartItems", JSON.stringify([]));
+      } catch (error) {
+        console.error("Failed to save empty cart data to storage:", error);
       }
-    }, 200);
+    }
 
+    // Load saved form data only on first mount
     const savedFormData = localStorage.getItem("checkoutFormData");
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const userData = localStorage.getItem("userData");
+
     if (savedFormData) {
       try {
         const parsedFormData = JSON.parse(savedFormData);
@@ -279,9 +306,23 @@ function CheckOut() {
       } catch (error) {
         console.error("Failed to parse form data from localStorage", error);
       }
+    } else if (isLoggedIn && userData) {
+      // If user is logged in but no saved form data, pre-fill with user data
+      try {
+        const parsedUserData = JSON.parse(userData);
+        if (parsedUserData.email) {
+          setFormData((prev) => ({
+            ...prev,
+            email: parsedUserData.email,
+            // You can add more pre-filled fields here if userData contains them
+          }));
+        }
+      } catch (error) {
+        console.error("Failed to parse user data from localStorage", error);
+      }
     }
 
-    // Check for persisted upgrade status
+    // Load subscription upgrade status
     const savedUpgradeStatus = localStorage.getItem("subscriptionUpgraded");
     const savedSavings = localStorage.getItem("subscriptionSavings");
     if (savedUpgradeStatus === "true" && savedSavings) {
@@ -289,8 +330,10 @@ function CheckOut() {
       setSubscriptionSavings(parseFloat(savedSavings));
     }
 
-    return () => clearTimeout(timeoutId);
-  }, [navigate, location.state]);
+    // Mark as initialized
+    cartInitializedRef.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Intentionally empty - we only want this to run once on mount
 
   useEffect(() => {
     const calcSubtotal = cartItems.reduce(
@@ -298,7 +341,6 @@ function CheckOut() {
       0
     );
 
-    // Calculate discount only for one-time purchase products (not subscriptions or demo products)
     const oneTimePurchaseTotal = cartItems
       .filter((item) => !item.isSubscription && !item.isDemoProduct)
       .reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -306,7 +348,6 @@ function CheckOut() {
     const discountAmount = couponApplied ? oneTimePurchaseTotal * 0.1 : 0;
     const discountedSubtotal = calcSubtotal - discountAmount;
 
-    // Calculate shipping based on selected method and free shipping thresholds
     let calcShipping = 0;
     switch (formData.shippingMethod) {
       case "standard":
@@ -322,7 +363,7 @@ function CheckOut() {
         calcShipping = discountedSubtotal >= 75 ? 0 : 8.99;
     }
 
-    const calcTax = discountedSubtotal * 0.08;
+    const calcTax = discountedSubtotal * 0.06;
     const calcTotal = discountedSubtotal + calcShipping + calcTax;
 
     setSubtotal(calcSubtotal);
@@ -331,7 +372,6 @@ function CheckOut() {
     setTax(calcTax);
     setTotal(calcTotal);
 
-    // Save cart items to localStorage whenever they change
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems, couponApplied, formData.shippingMethod]);
 
@@ -344,7 +384,6 @@ function CheckOut() {
     setFormData((prev) => ({ ...prev, shippingMethod: value }));
   };
 
-  // Helper function to get shipping method display name
   const getShippingMethodName = (method) => {
     switch (method) {
       case "standard":
@@ -361,18 +400,59 @@ function CheckOut() {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    // Clear coupon error when user starts typing in the coupon field
     if (name === "promoCode" && couponError) {
       setCouponError("");
     }
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setFormData((prev) => {
+      const updated = {
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      };
+
+      // If sameShippingAddress is checked and we're updating shipping fields,
+      // also update the corresponding billing fields
+      if (
+        updated.sameShippingAddress &&
+        [
+          "firstName",
+          "lastName",
+          "address1",
+          "address2",
+          "city",
+          "state",
+          "zipCode",
+          "phone",
+          "country",
+        ].includes(name)
+      ) {
+        const billingFieldName =
+          name === "address1"
+            ? "billingAddress1"
+            : name === "address2"
+            ? "billingAddress2"
+            : `billing${name.charAt(0).toUpperCase() + name.slice(1)}`;
+
+        updated[billingFieldName] = value;
+      }
+
+      // If toggling sameShippingAddress to true, sync all billing fields
+      if (name === "sameShippingAddress" && checked) {
+        updated.billingFirstName = updated.firstName;
+        updated.billingLastName = updated.lastName;
+        updated.billingAddress1 = updated.address1;
+        updated.billingAddress2 = updated.address2;
+        updated.billingCity = updated.city;
+        updated.billingState = updated.state;
+        updated.billingZipCode = updated.zipCode;
+        updated.billingPhone = updated.phone;
+        updated.billingCountry = updated.country;
+      }
+
+      return updated;
+    });
   };
 
-  // Helper function to update cart and dispatch events
   const updateCartGlobally = async (
     newItems,
     message = "",
@@ -381,14 +461,22 @@ function CheckOut() {
     setIsCartUpdating(true);
     setLoadingMessage(productName ? `${message} ${productName}...` : message);
 
-    // Update localStorage
     localStorage.setItem("cartItems", JSON.stringify(newItems));
 
-    // Dispatch events for other components to update
+    const newCartCount = newItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    localStorage.setItem("cartCount", newCartCount.toString());
+    window.dispatchEvent(
+      new CustomEvent("cartCountUpdate", {
+        detail: { cartCount: newCartCount },
+      })
+    );
+
     window.dispatchEvent(new Event("cartUpdate"));
     window.dispatchEvent(new Event("localStorageChange"));
 
-    // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     setCartItems(newItems);
@@ -396,7 +484,6 @@ function CheckOut() {
     setLoadingMessage("");
   };
 
-  // Modify handleRemoveItem to use the new updateCartGlobally function
   const handleRemoveItem = async (itemId) => {
     const itemToRemove = cartItems.find((item) => item.id === itemId);
     if (!itemToRemove) return;
@@ -422,11 +509,9 @@ function CheckOut() {
   const handleCouponApply = () => {
     const couponCode = formData.promoCode.trim().toUpperCase();
 
-    // Reset states
     setCouponError("");
     setShowCouponSuggestion(false);
 
-    // Check if coupon code is valid (you can customize this logic)
     if (couponCode === "SAVE10" || couponCode === "DISCOUNT10") {
       setCouponApplied(true);
       setCouponError("");
@@ -440,16 +525,12 @@ function CheckOut() {
   };
 
   const handleAddDemoProduct = async () => {
-    // Check if demo product already exists in cart
     const existingItem = cartItems.find((item) => item.isDemoProduct);
 
-    // If demo product already exists, don't add it again
     if (existingItem) {
-      console.log("Demo product already exists in cart");
       return;
     }
 
-    // Demo product details
     const demoProduct = {
       id: "demo-perfect-peace",
       productName: "Perfect Peace",
@@ -462,40 +543,36 @@ function CheckOut() {
       isDemoProduct: true,
     };
 
-    // Add new demo product to cart
     const updatedCartItems = [...cartItems, demoProduct];
 
-    // Update cart with loading animation
-    await updateCartWithDelayLocal(updatedCartItems, "Adding demo product...");
+    await updateCartWithDelayLocal(
+      updatedCartItems,
+      `Adding ${demoProduct.productName}...`
+    );
   };
 
   const handleUpgradeToSubscription = async () => {
-    // Calculate savings before upgrade
     const oneTimePurchaseTotal = cartItems
       .filter((item) => !item.isSubscription && !item.isDemoProduct)
       .reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    const savings = oneTimePurchaseTotal * 0.15; // 15% savings
+    const savings = oneTimePurchaseTotal * 0.15;
 
-    // Update cart items with subscriptions
     const updatedCartItems = cartItems.map((item) => {
-      // Only upgrade one-time purchase products (not subscriptions or demo products)
       if (!item.isSubscription && !item.isDemoProduct) {
         return {
           ...item,
           isSubscription: true,
           subscriptionFrequency: deliveryFrequency,
           originalPrice: item.price,
-          price: item.price * 0.85, // Apply 15% subscription discount
+          price: item.price * 0.85,
         };
       }
       return item;
     });
 
-    // Update cart and localStorage
     await updateCartGlobally(updatedCartItems, "Upgrading to subscription...");
 
-    // Update subscription status in localStorage
     localStorage.setItem("subscriptionUpgraded", "true");
     localStorage.setItem("subscriptionSavings", savings.toString());
 
@@ -510,7 +587,6 @@ function CheckOut() {
     localStorage.removeItem("subscriptionSavings");
   };
 
-  // Helper function to simulate backend processing and update cart
   const updateCartWithDelayLocal = async (
     updatedCartItems,
     loadingMessage = "Updating cart..."
@@ -529,7 +605,6 @@ function CheckOut() {
   };
 
   const handleUndoUpgrade = async () => {
-    // Restore original prices and remove subscription status
     const restoredCartItems = cartItems.map((item) => {
       if (item.isSubscription && item.originalPrice) {
         return {
@@ -543,13 +618,8 @@ function CheckOut() {
       return item;
     });
 
-    // Update cart and localStorage
-    await updateCartGlobally(
-      restoredCartItems,
-      "Undoing subscription upgrade..."
-    );
+    await updateCartGlobally(restoredCartItems, "Removing the subscription...");
 
-    // Clear subscription status from localStorage
     localStorage.removeItem("subscriptionUpgraded");
     localStorage.removeItem("subscriptionSavings");
 
@@ -557,10 +627,9 @@ function CheckOut() {
     setSubscriptionSavings(0);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Reset all errors
     const newErrors = {
       email: "",
       firstName: "",
@@ -583,13 +652,11 @@ function CheckOut() {
 
     let isValid = true;
 
-    // Validate email
     if (!validateEmail(formData.email)) {
       newErrors.email = "Please enter a valid email address";
       isValid = false;
     }
 
-    // Validate shipping information
     if (!validateName(formData.firstName)) {
       newErrors.firstName = "First name is required (min 2 characters)";
       isValid = false;
@@ -625,7 +692,6 @@ function CheckOut() {
       isValid = false;
     }
 
-    // Validate billing information if different from shipping
     if (!formData.sameShippingAddress) {
       if (!validateName(formData.billingFirstName || "")) {
         newErrors.billingFirstName =
@@ -665,19 +731,15 @@ function CheckOut() {
       }
     }
 
-    // Clear previous card errors
     setCardNumberError("");
     setExpiryError("");
 
-    // Validate payment information
     if (formData.paymentMethod === "creditCard") {
-      // Validate card name
       if (!validateName(formData.cardName || "")) {
         newErrors.cardName = "Please enter the name on card";
         isValid = false;
       }
 
-      // Only accept card number 2222222222222222 for testing
       if (!validateCardNumber(formData.cardNumber)) {
         setCardNumberError(
           "For testing, only card number 2222 2222 2222 2222 is accepted."
@@ -685,7 +747,6 @@ function CheckOut() {
         isValid = false;
       }
 
-      // Expiry validation
       if (!isExpiryValid(formData.expiry)) {
         const [mm, yy] = (formData.expiry || "").split("/");
         if (mm && yy) {
@@ -703,19 +764,15 @@ function CheckOut() {
         isValid = false;
       }
 
-      // CVV validation
       if (formData.cvv.length !== 3) {
         newErrors.cvv = "CVV must be 3 digits";
         isValid = false;
       }
     }
 
-    // Update errors state with validation results
     setErrors(newErrors);
 
-    // Check if billing address fields are required
     if (!formData.sameShippingAddress) {
-      // Validate that billing fields are filled out if using different address
       if (
         !formData.billingFirstName ||
         !formData.billingLastName ||
@@ -729,12 +786,7 @@ function CheckOut() {
       }
     }
 
-    // City and state validation already handled above
-
-    // Card number validation already handled above
-
     if (!isValid) {
-      // Smooth scroll to the first error field
       const firstErrorField = document.querySelector(".error-field");
       if (firstErrorField) {
         firstErrorField.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -742,72 +794,140 @@ function CheckOut() {
       return;
     }
 
-    // Process order
-    // For demo purposes, just clear cart and navigate to thank you page
-    localStorage.removeItem("cartItems");
-    localStorage.setItem("orderCompleted", "true");
+    // Start order processing
+    setIsProcessingOrder(true);
 
-    navigate("/thank-you");
+    try {
+      // Simulate order processing delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const orderData = {
+        cartItems,
+        formData,
+        subtotal,
+        shipping,
+        tax,
+        total,
+        orderDate: new Date().toISOString(),
+        shippingMethod: getShippingMethodName(formData.shippingMethod),
+      };
+      localStorage.setItem("orderData", JSON.stringify(orderData));
+      localStorage.setItem("orderCompleted", "true");
+
+      // Check if user is logged in
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+      // Clear order data and get updated form data
+      const updatedFormData = clearOrderData(isLoggedIn, formData);
+
+      // Clear cart count
+      localStorage.setItem("cartCount", "0");
+      window.dispatchEvent(
+        new CustomEvent("cartCountUpdate", {
+          detail: { cartCount: 0 },
+        })
+      );
+
+      // Reset cart-related states
+      setCartItems([]);
+      setSubtotal(0);
+      setShipping(0);
+      setTax(0);
+      setTotal(0);
+      setCouponApplied(false);
+      setCouponDiscount(0);
+      setCouponError("");
+      setShowCouponSuggestion(true);
+      setSubscriptionUpgraded(false);
+      setSubscriptionSavings(0);
+      setCvvMasked("");
+
+      // Reset form data based on login status
+      setFormData(updatedFormData);
+
+      // Clear any validation errors
+      setErrors({
+        email: "",
+        firstName: "",
+        lastName: "",
+        address1: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        phone: "",
+        billingFirstName: "",
+        billingLastName: "",
+        billingAddress1: "",
+        billingCity: "",
+        billingState: "",
+        billingZipCode: "",
+        billingPhone: "",
+        cardName: "",
+        cvv: "",
+      });
+      setCardNumberError("");
+      setExpiryError("");
+
+      // Stop loading before navigation
+      setIsProcessingOrder(false);
+
+      // Small delay to ensure state updates, then navigate
+      setTimeout(() => {
+        window.location.hash = "/thank-you";
+      }, 100);
+    } catch (error) {
+      console.error("Order processing error:", error);
+      setIsProcessingOrder(false);
+    }
   };
 
   useEffect(() => {
+    // Clear any existing timer first
+    if (cvvTimerRef.current) {
+      clearTimeout(cvvTimerRef.current);
+      cvvTimerRef.current = null;
+    }
+
     if (formData.cvv.length === 0) {
       setCvvMasked("");
-      if (cvvTimer) clearTimeout(cvvTimer);
       return;
     }
+
     setCvvMasked(
       "*".repeat(formData.cvv.length - 1) +
         (formData.cvv.length > 0 ? formData.cvv[formData.cvv.length - 1] : "")
     );
-    if (cvvTimer) clearTimeout(cvvTimer);
+
     const timer = setTimeout(() => {
       setCvvMasked("*".repeat(formData.cvv.length));
     }, 1000);
-    setCvvTimer(timer);
-    return () => clearTimeout(timer);
-  }, [formData.cvv, cvvTimer]);
-  useEffect(() => {
-    // Only sync shipping to billing when "Same as shipping address" is selected
-    if (formData.sameShippingAddress) {
-      setFormData((prev) => ({
-        ...prev,
-        billingFirstName: prev.firstName,
-        billingLastName: prev.lastName,
-        billingAddress1: prev.address1,
-        billingAddress2: prev.address2,
-        billingCity: prev.city,
-        billingState: prev.state,
-        billingZipCode: prev.zipCode,
-        billingPhone: prev.phone,
-        billingCountry: prev.country,
-      }));
-    }
-  }, [formData.sameShippingAddress, formData]);
 
-  // Check if there are one-time purchase products in cart (not subscriptions or demo products)
+    cvvTimerRef.current = timer;
+
+    return () => {
+      clearTimeout(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.cvv]);
+
   const hasOneTimePurchaseProducts = cartItems.some(
     (item) => !item.isSubscription && !item.isDemoProduct
   );
 
-  // Get one-time purchase products for upgrade section
   const oneTimePurchaseProducts = cartItems.filter(
     (item) => !item.isSubscription && !item.isDemoProduct
   );
 
-  // Check if demo product is already in cart
   const hasDemoProduct = cartItems.some((item) => item.isDemoProduct);
 
-  // Calculate potential savings from subscription upgrade
   const calculateSavings = () => {
     const oneTimeTotal = oneTimePurchaseProducts.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    return (oneTimeTotal * 0.2).toFixed(2); // 20% savings
+    return (oneTimeTotal * 0.2).toFixed(2);
   };
 
-  // Add event listeners for cart updates
   useEffect(() => {
     const handleCartUpdate = () => {
       const savedCartItems = localStorage.getItem("cartItems");
@@ -817,7 +937,6 @@ function CheckOut() {
       }
     };
 
-    // Listen for cart updates from sidebar or other components
     window.addEventListener("cartUpdate", handleCartUpdate);
     window.addEventListener("storage", (e) => {
       if (e.key === "cartItems") {
@@ -831,13 +950,22 @@ function CheckOut() {
     };
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
-      {/* Loading Overlay */}
       <FullPageLoader
         isVisible={isCartUpdating}
         message={loadingMessage || "Updating Cart"}
         subtext="Please wait while we process your changes..."
+      />
+
+      <FullPageLoader
+        isVisible={isProcessingOrder}
+        message="Processing Your Order"
+        subtext="Please wait while we complete your purchase..."
       />
 
       <CheckoutContainer>
@@ -850,7 +978,6 @@ function CheckOut() {
                 focusedField={focusedField}
                 setFocusedField={setFocusedField}
                 handleInputChange={handleInputChange}
-                navigate={navigate}
                 handleShippingChange={handleShippingChange}
                 handleFormSubmit={handleFormSubmit}
                 cardNumberError={cardNumberError}

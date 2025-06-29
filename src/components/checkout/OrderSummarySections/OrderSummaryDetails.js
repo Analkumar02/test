@@ -56,6 +56,24 @@ const OrderSummaryDetails = ({
   shippingMethod,
   getShippingMethodName,
 }) => {
+  if (subtotal === 0) {
+    return (
+      <OrderSummaryDetailsContainer>
+        <SummaryRow>
+          <span
+            style={{
+              color: "#999",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            Total will be calculated after adding products.
+          </span>
+        </SummaryRow>
+      </OrderSummaryDetailsContainer>
+    );
+  }
+
   return (
     <OrderSummaryDetailsContainer>
       <SummaryRow>
@@ -96,7 +114,7 @@ const OrderSummaryDetails = ({
       </SummaryRow>
 
       <SummaryRow>
-        <span>Estimated Tax</span>
+        <span>Estimated Tax (6%)</span>
         <span>${tax.toFixed(2)}</span>
       </SummaryRow>
 

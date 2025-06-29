@@ -12,7 +12,7 @@ export const SectionTitle = styled.h4`
 
 export const FormRow = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => props.columns || "1fr 1fr"};
+  grid-template-columns: ${(props) => props.$columns || "1fr 1fr"};
   column-gap: 1rem;
   row-gap: 1rem;
   margin-bottom: 0.75rem;

@@ -27,14 +27,12 @@ const SearchBar = ({ isOpen, onClose }) => {
   const imagePath = useImagePath();
   const navigate = useNavigate();
 
-  // Focus input when open
   useEffect(() => {
     if (isOpen && inputRef.current) inputRef.current.focus();
     setQuery("");
     setFiltered([]);
   }, [isOpen]);
 
-  // Filter products as user types
   useEffect(() => {
     if (query.trim() === "") {
       setFiltered([]);
@@ -50,7 +48,6 @@ const SearchBar = ({ isOpen, onClose }) => {
     );
   }, [query]);
 
-  // Close on outside click
   useEffect(() => {
     const handleClick = (e) => {
       if (overlayRef.current && e.target === overlayRef.current) {
@@ -63,7 +60,6 @@ const SearchBar = ({ isOpen, onClose }) => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [isOpen, onClose]);
 
-  // ESC key closes
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -86,7 +82,6 @@ const SearchBar = ({ isOpen, onClose }) => {
           &times;
         </SearchClose>
       </SearchBarBox>
-      {/* Suggestions */}
       {query && (
         <SearchSuggestionsBox>
           <SearchSectionTitle>PRODUCTS</SearchSectionTitle>

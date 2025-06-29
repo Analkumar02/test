@@ -196,7 +196,7 @@ const ShippingSection = ({
         />
       </InputWrapper>
 
-      <FormRow columns="1.5fr 1fr 1fr">
+      <FormRow $columns="1.5fr 1fr 1fr">
         <InputWrapper className={errors.city ? "error-field" : ""}>
           <InputLabel
             htmlFor="city"

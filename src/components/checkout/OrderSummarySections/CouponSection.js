@@ -140,14 +140,14 @@ const CouponSection = ({
   formData,
   handleInputChange,
   handleCouponApply,
-  handleCouponRemove,
+  handleCouponRemove = () => {}, // Default function
   couponApplied,
   couponError,
   showCouponSuggestion,
   couponDiscount,
-  isSubscription,
-  couponLoading,
-  hasOneTimePurchaseProducts, // Add this prop
+  isSubscription = false, // Default value
+  couponLoading = false, // Default value
+  hasOneTimePurchaseProducts = false, // Default value
 }) => {
   // Only show the coupon section if there are one-time purchase products
   if (!hasOneTimePurchaseProducts) {
@@ -232,14 +232,6 @@ const CouponSection = ({
       )}
     </CouponSectionWrapper>
   );
-};
-
-// Default props to ensure handlers are never undefined
-CouponSection.defaultProps = {
-  handleCouponRemove: () => {},
-  couponLoading: false,
-  isSubscription: false,
-  hasOneTimePurchaseProducts: false,
 };
 
 export default CouponSection;

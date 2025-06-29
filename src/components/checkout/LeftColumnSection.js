@@ -46,7 +46,6 @@ const LeftColumnSection = ({
   focusedField,
   setFocusedField,
   handleInputChange,
-  navigate,
   handleShippingChange,
   handleFormSubmit,
   cardNumberError,
@@ -68,7 +67,6 @@ const LeftColumnSection = ({
         focusedField={focusedField}
         setFocusedField={setFocusedField}
         handleInputChange={handleInputChange}
-        navigate={navigate}
       />
 
       <ShippingSection

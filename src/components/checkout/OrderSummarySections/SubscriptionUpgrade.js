@@ -238,7 +238,12 @@ const SubscriptionUpgrade = ({
   handleUpgradeToSubscription,
   handleUndoUpgrade,
 }) => {
-  if (subscriptionUpgraded) {
+  // Only show upgrade success if there is at least one subscription product in the cart
+  const hasSubscriptionProducts = cartItems.some(
+    (item) => item.isSubscription && !item.isDemoProduct
+  );
+
+  if (subscriptionUpgraded && hasSubscriptionProducts) {
     return (
       <UpgradeSuccessSection>
         <SuccessHeader>

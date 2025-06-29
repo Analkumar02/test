@@ -5,7 +5,6 @@ import Container from "../components/Container";
 import { useImagePath } from "../context/ImagePathContext";
 import { Icon } from "@iconify/react";
 
-// Styled Components for Login/Signup Page
 const PageWrapper = styled.div`
   padding: 4rem 0;
 
@@ -294,13 +293,12 @@ function Login() {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    // For demo purposes, just store login status and redirect
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem(
       "userData",
       JSON.stringify({
         email: loginForm.email,
-        name: "John Doe", // Demo user
+        name: "John Doe",
       })
     );
     navigate("/checkout");
@@ -308,13 +306,11 @@ function Login() {
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    // Validate passwords match
     if (signupForm.password !== signupForm.confirmPassword) {
       alert("Passwords don't match");
       return;
     }
 
-    // For demo purposes, just store signup info and redirect
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem(
       "userData",
@@ -347,7 +343,6 @@ function Login() {
 
           <FormContainer>
             {activeTab === "login" ? (
-              /* Login Form */
               <form onSubmit={handleLoginSubmit}>
                 <FormTitle>Welcome Back</FormTitle>
 
@@ -420,7 +415,6 @@ function Login() {
                 </Disclaimer>
               </form>
             ) : (
-              /* Signup Form */
               <form onSubmit={handleSignupSubmit}>
                 <FormTitle>Create an Account</FormTitle>
 

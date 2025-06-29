@@ -35,14 +35,12 @@ const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
 
-  // Initialize cart count from localStorage
   useEffect(() => {
     const storedCount = localStorage.getItem("cartCount");
     if (storedCount) {
       setCartCount(parseInt(storedCount, 10));
     }
 
-    // Listen for cart count updates from other components
     const handleCartCountUpdate = (e) => {
       if (e.detail && typeof e.detail.cartCount === "number") {
         setCartCount(e.detail.cartCount);
@@ -65,7 +63,7 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 3000); // Change slide every 3 seconds
+    }, 3000);
     return () => clearInterval(interval);
   }, [slides.length]);
 
@@ -91,7 +89,6 @@ const Header = () => {
           );
         })}
       </Topbar>
-      {/* Desktop Header */}
       <HeaderWrapper $isSticky={isSticky} $atTop={!isSticky}>
         <Container>
           <HeaderContainer>
@@ -143,7 +140,6 @@ const Header = () => {
           </HeaderContainer>
         </Container>
       </HeaderWrapper>
-      {/* Mobile Header */}
       <HeaderWrapperMob $isSticky={isSticky} $atTop={!isSticky}>
         <Container>
           <HeaderContainerMob>
@@ -203,17 +199,14 @@ const Header = () => {
           </HeaderContainerMob>
         </Container>
       </HeaderWrapperMob>
-      {/* Mobile Menu */}
       <MobileMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         isSticky={isSticky}
       />
-      {/* Search Bar */}
       {isSearchOpen && (
         <SearchBar isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} />
       )}
-      {/* Sidebar Cart */}
       {isCartVisible && (
         <SidebarCart
           isVisible={isCartVisible}

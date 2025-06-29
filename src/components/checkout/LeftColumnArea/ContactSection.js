@@ -34,13 +34,14 @@ const ContactSection = ({
   focusedField,
   setFocusedField,
   handleInputChange,
-  navigate,
 }) => {
   return (
     <FormSection>
       <SectionHeader>
         <SectionTitle>Contact</SectionTitle>
-        <LoginLink onClick={() => navigate("/login")}>Login</LoginLink>
+        <LoginLink onClick={() => (window.location.hash = "/login")}>
+          Login
+        </LoginLink>
       </SectionHeader>
       <InputWrapper className={errors.email ? "error-field" : ""}>
         <InputLabel
