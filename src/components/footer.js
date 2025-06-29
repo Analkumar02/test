@@ -361,13 +361,13 @@ const Footer = () => {
             />
           </Copyright>
           <FooterLinks>
-            <a href="/">Refund Policy</a>&nbsp;|&nbsp;
-            <a href="/">Shipping Policy</a>&nbsp;|&nbsp;
-            <a href="/">Privacy Policy</a>&nbsp;|&nbsp;
-            <a href="/">Accessibility Statement</a>
+            <Link to="/">Refund Policy</Link>&nbsp;|&nbsp;
+            <Link to="/">Shipping Policy</Link>&nbsp;|&nbsp;
+            <Link to="/">Privacy Policy</Link>&nbsp;|&nbsp;
+            <Link to="/">Accessibility Statement</Link>
             &nbsp;|&nbsp;
-            <a href="/">Subscription Policy</a>&nbsp;|&nbsp;
-            <a href="/">Promotional Offers</a>
+            <Link to="/">Subscription Policy</Link>&nbsp;|&nbsp;
+            <Link to="/">Promotional Offers</Link>
           </FooterLinks>
           <Note>
             <p>

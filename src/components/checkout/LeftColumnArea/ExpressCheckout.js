@@ -23,6 +23,10 @@ const ExpressButtons = styled.div`
   margin-bottom: 1rem;
   img {
     cursor: pointer;
+    @media (max-width: 767px) {
+      width: 160px;
+      height: auto;
+    }
   }
 `;
 

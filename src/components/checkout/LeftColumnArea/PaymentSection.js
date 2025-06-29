@@ -131,7 +131,7 @@ const PaymentSection = ({
             src={(imagePath ? imagePath : "/images/") + "creditcards.png"}
             alt="Credit Card"
             style={{
-              height: "28px",
+              height: "20px",
               marginLeft: "1rem",
               filter: "drop-shadow(0 1px 2px #e0e0e0)",
             }}
@@ -194,9 +194,9 @@ const PaymentSection = ({
                     style={{
                       position: "absolute",
                       right: 16,
-                      top: "50%",
+                      top: "40%",
                       transform: "translateY(-50%)",
-                      width: 44,
+                      width: 30,
                       pointerEvents: "none",
                       zIndex: 2,
                     }}

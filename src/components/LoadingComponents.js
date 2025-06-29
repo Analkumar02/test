@@ -106,13 +106,22 @@ export const FullPageLoader = ({
 export const SidebarLoader = ({
   message = "Updating cart...",
   isVisible = true,
+  productName = null,
+  action = null,
 }) => {
   if (!isVisible) return null;
+
+  let displayMessage = message;
+  if (productName && action) {
+    displayMessage = `${action} \u201C${productName}\u201D...`;
+  } else if (productName) {
+    displayMessage = `Updating \u201C${productName}\u201D...`;
+  }
 
   return (
     <SidebarLoadingOverlay>
       <LoadingSpinner size="small" />
-      <LoadingText size="small">{message}</LoadingText>
+      <LoadingText size="small">{displayMessage}</LoadingText>
     </SidebarLoadingOverlay>
   );
 };

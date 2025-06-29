@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import OrderItem from "./OrderSummarySections/OrderItem";
 import CouponSection from "./OrderSummarySections/CouponSection";
@@ -16,8 +15,17 @@ const OrderSummaryContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   position: sticky;
-  top: 0;
+  top: 5rem;
   right: 0;
+  max-height: fit-content;
+  overflow-y: auto;
+
+  @media (max-width: 1024px) {
+    max-height: none;
+    position: static;
+    top: unset;
+    overflow: visible;
+  }
 
   @media (max-width: 768px) {
     padding: 1.25rem;
@@ -46,6 +54,7 @@ const OrderSummarySection = ({
   couponDiscount,
   formData,
   handleCouponApply,
+  handleCouponRemove,
   couponError,
   showCouponSuggestion,
   hasDemoProduct,
@@ -66,7 +75,6 @@ const OrderSummarySection = ({
   total,
   getShippingMethodName,
 }) => {
-  const navigate = useNavigate();
   return (
     <OrderSummaryContainer>
       <OrderSummaryTitle>Order Summary</OrderSummaryTitle>
@@ -95,21 +103,6 @@ const OrderSummarySection = ({
           <p style={{ margin: "0.5rem 0 0.8rem 0", fontSize: "0.9rem" }}>
             Add products to complete your checkout
           </p>
-          <button
-            onClick={() => navigate("/shop")}
-            style={{
-              background: "#60983E",
-              color: "white",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "4px",
-              fontSize: "0.9rem",
-              cursor: "pointer",
-              fontWeight: 500,
-            }}
-          >
-            Browse Products
-          </button>
         </div>
       ) : (
         cartItems.map((item, index) => (
@@ -132,10 +125,12 @@ const OrderSummarySection = ({
           formData.promoCode = value;
         }}
         handleCouponApply={handleCouponApply}
+        handleCouponRemove={handleCouponRemove}
         couponApplied={couponApplied}
         couponError={couponError}
         showCouponSuggestion={showCouponSuggestion}
         couponDiscount={couponDiscount}
+        hasOneTimePurchaseProducts={hasOneTimePurchaseProducts}
       />
 
       {/* Demo Product Section - Only show if no demo product is in cart */}

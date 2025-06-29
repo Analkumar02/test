@@ -60,7 +60,7 @@ const ShippingMethodSection = ({
                 FREE
               </span>
             ) : (
-              "$8.99"
+              <span style={{ color: "#333" }}>$8.99</span>
             )}
           </div>
         </Option>
@@ -102,7 +102,7 @@ const ShippingMethodSection = ({
                 FREE
               </span>
             ) : (
-              "$12.99"
+              <span style={{ color: "#333" }}>$12.99</span>
             )}
           </div>
         </Option>
@@ -129,9 +129,23 @@ const ShippingMethodSection = ({
               fontSize: "1rem",
               marginLeft: "1.5rem",
               marginTop: "2px",
+              color: subtotal >= 150 ? "#28a745" : "#333",
             }}
           >
-            $22.99
+            {subtotal >= 150 ? (
+              <span
+                style={{
+                  background: "#e8f5e9",
+                  padding: "2px 8px",
+                  borderRadius: "4px",
+                  fontSize: "0.9rem",
+                }}
+              >
+                FREE
+              </span>
+            ) : (
+              <span style={{ color: "#333" }}>$22.99</span>
+            )}
           </div>
         </Option>
       </OptionGroup>

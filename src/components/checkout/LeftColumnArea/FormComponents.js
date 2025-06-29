@@ -13,23 +13,31 @@ export const SectionTitle = styled.h4`
 export const FormRow = styled.div`
   display: grid;
   grid-template-columns: ${(props) => props.columns || "1fr 1fr"};
-  gap: 1rem;
+  column-gap: 1rem;
+  row-gap: 1rem;
   margin-bottom: 0.75rem;
 
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    column-gap: 1rem;
+    row-gap: 1rem;
   }
 
   @media (max-width: 767px) {
     grid-template-columns: 1fr !important;
-    gap: 0.75rem;
+    column-gap: 0.75rem;
+    row-gap: 0.75rem;
   }
 `;
 
 export const InputWrapper = styled.div`
   position: relative;
   margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* Add spacing for error message, but keep input/label area compact */
+  padding-bottom: 0.5rem;
 
   ${FormRow} & {
     margin-bottom: 0;
@@ -39,18 +47,34 @@ export const InputWrapper = styled.div`
 export const InputLabel = styled.label`
   position: absolute;
   left: 0.75rem;
-  top: ${(props) => (props.$focused || props.$hasValue ? "-0.5rem" : "50%")};
-  transform: translateY(
-    ${(props) => (props.$focused || props.$hasValue ? "0" : "-50%")}
-  );
+  /* Vertically center label based on input padding, not wrapper */
+  top: 0.65rem;
   background-color: ${({ theme }) => theme.colors.white};
   padding: 0 0.25rem;
-  font-size: ${(props) =>
-    props.$focused || props.$hasValue ? "0.75rem" : "0.9rem"};
-  color: ${(props) => (props.$focused ? "#333" : "#777")};
-  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  color: #777;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
+  line-height: 1.2;
+  min-height: 1.2em;
+  height: 1.2em;
+  display: flex;
+  align-items: center;
+  width: auto;
+  max-width: calc(100% - 1.5rem);
+  box-sizing: border-box;
+  will-change: top, font-size, color;
+  background-clip: padding-box;
+
+  ${({ $focused, $hasValue }) =>
+    ($focused || $hasValue) &&
+    `
+      top: -0.7rem;
+      font-size: 0.75rem;
+      color: #333;
+      transform: none;
+    `}
 `;
 
 export const Input = styled.input`

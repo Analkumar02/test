@@ -53,6 +53,7 @@ const LeftColumnSection = ({
   expiryError,
   cvvMasked,
   setFormData,
+  subtotal,
 }) => {
   return (
     <LeftColumnContainer>
@@ -80,7 +81,7 @@ const LeftColumnSection = ({
 
       <ShippingMethodSection
         formData={formData}
-        subtotal={formData.subtotal}
+        subtotal={subtotal}
         handleShippingChange={handleShippingChange}
       />
 

@@ -658,11 +658,16 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
   const [suggestedProducts, setSuggestedProducts] = useState([]);
   const [isCartUpdating, setIsCartUpdating] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
+  const [loadingProductName, setLoadingProductName] = useState("");
+  const [loadingAction, setLoadingAction] = useState("");
 
   // Subscription state
   const [openSubscription, setOpenSubscription] = useState(null);
   const [openSelect, setOpenSelect] = useState(null);
   const [selectedDelivery, setSelectedDelivery] = useState({});
+
+  // Modern empty cart alert state
+  const [showEmptyCartAlert, setShowEmptyCartAlert] = useState(false);
 
   // Click outside handler for dropdowns
   useEffect(() => {
@@ -688,19 +693,53 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
     setOpenSelect(openSelect === itemId ? null : itemId);
   };
 
+  // Helper function to update cart globally
+  const updateCartGlobally = (updatedCart) => {
+    // Update localStorage
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+
+    // Create and dispatch custom event for global updates
+    const event = new CustomEvent("cartUpdate", {
+      detail: {
+        cartItems: updatedCart,
+        count: updatedCart.reduce((total, item) => total + item.quantity, 0),
+      },
+    });
+    window.dispatchEvent(event);
+
+    // Also dispatch localStorage change event for other components
+    const storageEvent = new CustomEvent("localStorageChange", {
+      detail: {
+        key: "cartItems",
+        newValue: JSON.stringify(updatedCart),
+      },
+    });
+    window.dispatchEvent(storageEvent);
+  };
+
   // Helper function to simulate backend processing and update cart
   const updateCartWithDelayLocal = async (
     updatedCartItems,
-    message = "Updating cart..."
+    message = "Updating cart...",
+    productName = "",
+    action = ""
   ) => {
     try {
+      setLoadingProductName(productName);
+      setLoadingAction(action || message.split(" ")[0]);
+      const displayMessage = productName
+        ? `${action || message.split(" ")[0]} ${productName}...`
+        : message;
       await updateCartWithDelay(
         updatedCartItems,
         setIsCartUpdating,
         setLoadingMessage,
-        message
+        displayMessage
       );
       setCartItems(updatedCartItems);
+      updateCartGlobally(updatedCartItems);
+      setLoadingProductName("");
+      setLoadingAction("");
     } catch (error) {
       console.error("Error updating cart:", error);
     }
@@ -714,16 +753,15 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
     });
     setOpenSelect(null);
 
-    // Find product in the cart
-    const updatedItems = cartItems.map((item) => {
-      if (item.id === itemId) {
-        // Get product data to access subscription pricing
+    const item = cartItems.find((item) => item.id === itemId);
+    const updatedItems = cartItems.map((cartItem) => {
+      if (cartItem.id === itemId) {
         const productInfo = productData.find(
           (product) => product.id === itemId
         );
         if (productInfo && productInfo.pricing.subscribeAndSave) {
           return {
-            ...item,
+            ...cartItem,
             isSubscription: true,
             deliveryOption: option,
             price: productInfo.pricing.subscribeAndSave.discountedPrice,
@@ -731,26 +769,27 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
           };
         }
       }
-      return item;
+      return cartItem;
     });
 
     await updateCartWithDelayLocal(
       updatedItems,
-      "Upgrading to subscription..."
+      `Upgrading to subscription for`,
+      item.productName
     );
   };
 
   // Function to remove subscription and revert to one-time purchase
   const removeSubscription = async (itemId) => {
-    const updatedItems = cartItems.map((item) => {
-      if (item.id === itemId) {
-        // Get product data to access original pricing
+    const item = cartItems.find((item) => item.id === itemId);
+    const updatedItems = cartItems.map((cartItem) => {
+      if (cartItem.id === itemId) {
         const productInfo = productData.find(
           (product) => product.id === itemId
         );
         if (productInfo) {
           return {
-            ...item,
+            ...cartItem,
             isSubscription: false,
             deliveryOption: null,
             price: productInfo.pricing.oneTimePurchase.price,
@@ -758,12 +797,15 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
           };
         }
       }
-      return item;
+      return cartItem;
     });
 
-    await updateCartWithDelayLocal(updatedItems, "Removing subscription...");
+    await updateCartWithDelayLocal(
+      updatedItems,
+      `Removing subscription from`,
+      item.productName
+    );
 
-    // Remove from selected delivery options
     const newSelectedDelivery = { ...selectedDelivery };
     delete newSelectedDelivery[itemId];
     setSelectedDelivery(newSelectedDelivery);
@@ -882,6 +924,23 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
     };
   }, [onCartUpdate]);
 
+  // Listen for global cart updates
+  useEffect(() => {
+    const handleCartUpdate = (e) => {
+      if (e.detail && e.detail.cartItems) {
+        setCartItems(e.detail.cartItems);
+        if (onCartUpdate) {
+          onCartUpdate(e.detail.count);
+        }
+      }
+    };
+
+    window.addEventListener("cartUpdate", handleCartUpdate);
+    return () => {
+      window.removeEventListener("cartUpdate", handleCartUpdate);
+    };
+  }, [onCartUpdate]);
+
   // Calculate totals when items change
   useEffect(() => {
     let subtotalSum = 0;
@@ -951,23 +1010,29 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
   const handleUpdateQuantity = async (itemId, newQuantity) => {
     if (newQuantity < 1) return;
 
-    const updatedItems = cartItems.map((item) =>
-      item.id === itemId ? { ...item, quantity: newQuantity } : item
+    const item = cartItems.find((item) => item.id === itemId);
+    const updatedItems = cartItems.map((cartItem) =>
+      cartItem.id === itemId ? { ...cartItem, quantity: newQuantity } : cartItem
     );
 
-    await updateCartWithDelayLocal(updatedItems, "Updating quantity...");
+    await updateCartWithDelayLocal(
+      updatedItems,
+      `Updating quantity for`,
+      item.productName
+    );
   };
 
   const handleRemoveItem = async (itemId) => {
-    const updatedItems = cartItems.filter((item) => item.id !== itemId);
-    await updateCartWithDelayLocal(updatedItems, "Removing item...");
+    const item = cartItems.find((item) => item.id === itemId);
+    const updatedItems = cartItems.filter((cartItem) => cartItem.id !== itemId);
+    await updateCartWithDelayLocal(updatedItems, `Removing`, item.productName);
   };
   const handleCheckoutClick = (e) => {
     e.preventDefault();
 
     // Check if cart has items
     if (cartItems.length === 0) {
-      alert("Your cart is empty. Please add some items before checkout.");
+      setShowEmptyCartAlert(true);
       return;
     }
 
@@ -1045,7 +1110,8 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
       const updatedItems = [...cartItems, newItem];
       await updateCartWithDelayLocal(
         updatedItems,
-        "Adding suggested product..."
+        `Adding`,
+        productToAdd.productName
       );
     }
   };
@@ -1099,12 +1165,92 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
 
   return (
     <>
+      {/* Modern empty cart alert */}
+      {showEmptyCartAlert && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.35)",
+            zIndex: 3000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: 16,
+              boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
+              padding: "2.5rem 2rem 2rem 2rem",
+              minWidth: 320,
+              maxWidth: "90vw",
+              textAlign: "center",
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 16,
+            }}
+          >
+            <Icon
+              icon="mdi:cart-off"
+              width="48"
+              height="48"
+              color="#60983E"
+              style={{ marginBottom: 12 }}
+            />
+            <h3
+              style={{
+                margin: 0,
+                fontWeight: 700,
+                color: "#222",
+                fontSize: 22,
+              }}
+            >
+              Your cart is empty
+            </h3>
+            <p
+              style={{
+                margin: "8px 0 20px 0",
+                color: "#555",
+                fontSize: 16,
+              }}
+            >
+              Please add some items before checkout.
+            </p>
+            <button
+              style={{
+                background: "#60983E",
+                color: "white",
+                border: "none",
+                padding: "10px 28px",
+                borderRadius: "6px",
+                fontSize: "1rem",
+                cursor: "pointer",
+                fontWeight: 600,
+                boxShadow: "0 2px 8px rgba(96,152,62,0.08)",
+                marginTop: 8,
+              }}
+              onClick={() => setShowEmptyCartAlert(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
       {animationState && <Overlay isVisible={isVisible} onClick={onClose} />}
       {animationState && (
         <SidebarWrapper isVisible={isVisible} ref={cartRef}>
           <SidebarLoader
             isVisible={isCartUpdating}
             message={loadingMessage || "Updating cart..."}
+            productName={loadingProductName}
+            action={loadingAction}
           />
           <CartBody>
             <CartTitle>
@@ -1344,6 +1490,25 @@ const SidebarCart = ({ isVisible, onClose, onCartUpdate }) => {
                 ) : (
                   <EmptyCartMessage>
                     <p>Your cart is empty</p>
+                    <button
+                      style={{
+                        background: "#60983E",
+                        color: "white",
+                        border: "none",
+                        padding: "8px 16px",
+                        borderRadius: "4px",
+                        fontSize: "0.9rem",
+                        cursor: "pointer",
+                        fontWeight: 500,
+                        marginTop: "1rem",
+                      }}
+                      onClick={() => {
+                        if (onClose) onClose();
+                        navigate("/shop");
+                      }}
+                    >
+                      Browse Products
+                    </button>
                   </EmptyCartMessage>
                 )}
                 {/* Product Suggestions with modern design */}

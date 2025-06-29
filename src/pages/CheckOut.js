@@ -372,34 +372,41 @@ function CheckOut() {
     }));
   };
 
+  // Helper function to update cart and dispatch events
+  const updateCartGlobally = async (
+    newItems,
+    message = "",
+    productName = ""
+  ) => {
+    setIsCartUpdating(true);
+    setLoadingMessage(productName ? `${message} ${productName}...` : message);
+
+    // Update localStorage
+    localStorage.setItem("cartItems", JSON.stringify(newItems));
+
+    // Dispatch events for other components to update
+    window.dispatchEvent(new Event("cartUpdate"));
+    window.dispatchEvent(new Event("localStorageChange"));
+
+    // Simulate network delay
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    setCartItems(newItems);
+    setIsCartUpdating(false);
+    setLoadingMessage("");
+  };
+
+  // Modify handleRemoveItem to use the new updateCartGlobally function
   const handleRemoveItem = async (itemId) => {
+    const itemToRemove = cartItems.find((item) => item.id === itemId);
+    if (!itemToRemove) return;
+
     const newItems = cartItems.filter((item) => item.id !== itemId);
-
-    if (newItems.length === 0) {
-      // If cart becomes empty, update storage but stay on the page
-      try {
-        // Set empty cart items in state and storage
-        setCartItems([]);
-        localStorage.setItem("cartItems", JSON.stringify([]));
-        sessionStorage.setItem("cartItems", JSON.stringify([]));
-        console.log("Cart is now empty, updated storage");
-
-        // Dispatch custom event for empty cart
-        window.dispatchEvent(
-          new CustomEvent("localStorageChange", {
-            detail: {
-              key: "cartItems",
-              newValue: "[]",
-            },
-          })
-        );
-      } catch (error) {
-        console.error("Error updating cart storage:", error);
-      }
-    } else {
-      // Update cart with loading animation
-      await updateCartWithDelayLocal(newItems, "Removing item...");
-    }
+    await updateCartGlobally(
+      newItems,
+      "Removing",
+      itemToRemove.productName || "item"
+    );
   };
 
   const handleCouponRemove = (e) => {
@@ -470,38 +477,30 @@ function CheckOut() {
 
     const savings = oneTimePurchaseTotal * 0.15; // 15% savings
 
-    // Find all one-time purchase products
+    // Update cart items with subscriptions
     const updatedCartItems = cartItems.map((item) => {
       // Only upgrade one-time purchase products (not subscriptions or demo products)
       if (!item.isSubscription && !item.isDemoProduct) {
         return {
           ...item,
           isSubscription: true,
-          subscriptionFrequency: deliveryFrequency, // Use the selected delivery frequency
-          originalPrice: item.price, // Store the original one-time price
+          subscriptionFrequency: deliveryFrequency,
+          originalPrice: item.price,
           price: item.price * 0.85, // Apply 15% subscription discount
         };
       }
       return item;
     });
 
-    // Set upgrade success state immediately
+    // Update cart and localStorage
+    await updateCartGlobally(updatedCartItems, "Upgrading to subscription...");
+
+    // Update subscription status in localStorage
+    localStorage.setItem("subscriptionUpgraded", "true");
+    localStorage.setItem("subscriptionSavings", savings.toString());
+
     setSubscriptionUpgraded(true);
     setSubscriptionSavings(savings);
-
-    // Store upgrade status in localStorage
-    try {
-      localStorage.setItem("subscriptionUpgraded", "true");
-      localStorage.setItem("subscriptionSavings", savings.toString());
-    } catch (error) {
-      console.error("Error saving upgrade status:", error);
-    }
-
-    // Update cart with loading animation
-    await updateCartWithDelayLocal(
-      updatedCartItems,
-      "Upgrading to subscription..."
-    );
   };
 
   const handleDismissUpgradeSuccess = () => {
@@ -530,37 +529,32 @@ function CheckOut() {
   };
 
   const handleUndoUpgrade = async () => {
-    // Convert subscription products back to one-time purchase
-    const updatedCartItems = cartItems.map((item) => {
-      if (item.isSubscription && !item.isDemoProduct && item.originalPrice) {
+    // Restore original prices and remove subscription status
+    const restoredCartItems = cartItems.map((item) => {
+      if (item.isSubscription && item.originalPrice) {
         return {
           ...item,
           isSubscription: false,
-          price: item.originalPrice, // Restore original price
-          subscriptionFrequency: undefined,
-          originalPrice: undefined,
+          price: item.originalPrice,
+          originalPrice: null,
+          subscriptionFrequency: null,
         };
       }
       return item;
     });
 
-    // Clear upgrade success state
+    // Update cart and localStorage
+    await updateCartGlobally(
+      restoredCartItems,
+      "Undoing subscription upgrade..."
+    );
+
+    // Clear subscription status from localStorage
+    localStorage.removeItem("subscriptionUpgraded");
+    localStorage.removeItem("subscriptionSavings");
+
     setSubscriptionUpgraded(false);
     setSubscriptionSavings(0);
-
-    // Remove upgrade status from localStorage
-    try {
-      localStorage.removeItem("subscriptionUpgraded");
-      localStorage.removeItem("subscriptionSavings");
-    } catch (error) {
-      console.error("Error removing upgrade status:", error);
-    }
-
-    // Update cart with loading animation
-    await updateCartWithDelayLocal(
-      updatedCartItems,
-      "Reverting subscription..."
-    );
   };
 
   const handleFormSubmit = (e) => {
@@ -813,6 +807,30 @@ function CheckOut() {
     return (oneTimeTotal * 0.2).toFixed(2); // 20% savings
   };
 
+  // Add event listeners for cart updates
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      const savedCartItems = localStorage.getItem("cartItems");
+      if (savedCartItems) {
+        const parsedItems = JSON.parse(savedCartItems);
+        setCartItems(parsedItems);
+      }
+    };
+
+    // Listen for cart updates from sidebar or other components
+    window.addEventListener("cartUpdate", handleCartUpdate);
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cartItems") {
+        handleCartUpdate();
+      }
+    });
+
+    return () => {
+      window.removeEventListener("cartUpdate", handleCartUpdate);
+      window.removeEventListener("storage", handleCartUpdate);
+    };
+  }, []);
+
   return (
     <>
       {/* Loading Overlay */}
@@ -839,6 +857,7 @@ function CheckOut() {
                 expiryError={expiryError}
                 cvvMasked={cvvMasked}
                 setFormData={setFormData}
+                subtotal={subtotal}
               />
 
               <OrderSummarySection

@@ -37,6 +37,12 @@ const DiscountRow = styled(SummaryRow)`
   }
 `;
 
+const getDisplayShippingMethodName = (method) => {
+  if (method === "Standard Ground") return "FedEx Ground";
+  if (method === "2nd Day Air") return "FedEx Air";
+  return method;
+};
+
 /**
  * OrderSummaryDetails component displays the price breakdown for the order
  */
@@ -65,7 +71,10 @@ const OrderSummaryDetails = ({
       )}
 
       <SummaryRow>
-        <span>Shipping ({getShippingMethodName(shippingMethod)})</span>
+        <span>
+          Shipping (
+          {getDisplayShippingMethodName(getShippingMethodName(shippingMethod))})
+        </span>
         <span>
           {shipping === 0 ? (
             <span
