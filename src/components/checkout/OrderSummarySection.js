@@ -1,10 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import OrderItemComponent from "./OrderSummarySections/OrderItem";
+import OrderItem from "./OrderSummarySections/OrderItem";
 import CouponSection from "./OrderSummarySections/CouponSection";
 import DemoProductSection from "./OrderSummarySections/DemoProductSection";
 import SubscriptionUpgrade from "./OrderSummarySections/SubscriptionUpgrade";
-import TrustBadges from "./TrustBadges";
+import TrustBadges from "./OrderSummarySections/TrustBadges";
 import OrderSummaryDetails from "./OrderSummarySections/OrderSummaryDetails";
 
 const OrderSummaryContainer = styled.div`
@@ -65,6 +66,7 @@ const OrderSummarySection = ({
   total,
   getShippingMethodName,
 }) => {
+  const navigate = useNavigate();
   return (
     <OrderSummaryContainer>
       <OrderSummaryTitle>Order Summary</OrderSummaryTitle>
@@ -80,14 +82,38 @@ const OrderSummarySection = ({
             marginBottom: "1.5rem",
           }}
         >
-          <p style={{ margin: 0, fontSize: "1rem" }}>Your cart is empty</p>
-          <p style={{ margin: "0.5rem 0 0 0", fontSize: "0.9rem" }}>
-            Add some products to continue with checkout
+          <p
+            style={{
+              margin: 0,
+              fontSize: "1.1rem",
+              fontWeight: 500,
+              color: "#444",
+            }}
+          >
+            Your cart is empty
           </p>
+          <p style={{ margin: "0.5rem 0 0.8rem 0", fontSize: "0.9rem" }}>
+            Add products to complete your checkout
+          </p>
+          <button
+            onClick={() => navigate("/shop")}
+            style={{
+              background: "#60983E",
+              color: "white",
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "4px",
+              fontSize: "0.9rem",
+              cursor: "pointer",
+              fontWeight: 500,
+            }}
+          >
+            Browse Products
+          </button>
         </div>
       ) : (
         cartItems.map((item, index) => (
-          <OrderItemComponent
+          <OrderItem
             key={index}
             item={item}
             imagePath={imagePath}
@@ -102,7 +128,8 @@ const OrderSummarySection = ({
       <CouponSection
         formData={formData}
         handleInputChange={(e) => {
-          formData.promoCode = e.target.value;
+          const { value } = e.target;
+          formData.promoCode = value;
         }}
         handleCouponApply={handleCouponApply}
         couponApplied={couponApplied}
